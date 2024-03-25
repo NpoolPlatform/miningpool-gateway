@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: miningpool-gateway
+  namespace: kube-system
+  annotations:
+    "sidecar.jaegertracing.io/inject": "true"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: miningpool-gateway
+  template:
+    metadata:
+      labels:
+        app: miningpool-gateway
+    spec:
+      containers:
+        - name: miningpool-gateway
+          image: uhub.service.ucloud.cn/entropypool/miningpool-gateway:latest
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: service-config
+              mountPath: /etc/MiningpoolGateway
+          env:
+            - name: ENV_ENVIRONMENT_TARGET
+              valueFrom:
+                configMapKeyRef:
+                  name: system-environment
+                  key: environment.target
+            - name: ENV_CONSUL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: system-environment
+                  key: environment.consul_host
+            - name: ENV_CONSUL_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: system-environment
+                  key: environment.consul_port
+            - name: ENV_CLUSTER_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+      volumes:
+        - name: service-config
+          configMap:
+            name: miningpool-gateway-config
+            items:
+              - key: service-conf
+                path: MiningpoolGateway.viper.yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: miningpool-gateway
+  namespace: kube-system
+spec:
+  ports:
+    - name: http
+      port: 50610
+      targetPort: 50610
+    - name: grpc
+      port: 50611
+      targetPort: 50611
+    - name: healthz
+      port: 50612
+      targetPort: 50612
+    - name: prometheus
+      port: 50613
+      targetPort: 50613
+  selector:
+    app: miningpool-gateway
