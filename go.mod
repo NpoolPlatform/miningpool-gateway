@@ -3,11 +3,12 @@ module github.com/NpoolPlatform/miningpool-gateway
 go 1.17
 
 require (
+	github.com/NpoolPlatform/appuser-middleware v0.0.0-20240228082801-b01a96a4f419
 	github.com/NpoolPlatform/basal-middleware v0.0.0-20240228105108-f00107969a4f
 	github.com/NpoolPlatform/go-service-framework v0.0.0-20231228071122-53a5febeea97
 	github.com/NpoolPlatform/libent-cruder v0.0.0-20231008051607-f64457cf6ab6
-	github.com/NpoolPlatform/message v0.0.0-20240325022631-f3da083159f4
-	github.com/NpoolPlatform/miningpool-middleware v0.0.0-20240322093525-31cc2903f0e3
+	github.com/NpoolPlatform/message v0.0.0-20240328082735-c5ba5b35040a
+	github.com/NpoolPlatform/miningpool-middleware v0.0.0-20240328033941-79da0a3a1130
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/google/uuid v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2

@@ -1,10 +1,10 @@
 ---
 config:
   hostname: "miningpool-gateway.npool.top"
-  http_port: 50610
-  grpc_port: 50611
-  healthz_port: 50612
-  prometheus_port: 50613
+  http_port: 50860
+  grpc_port: 50861
+  healthz_port: 50862
+  prometheus_port: 50863
   appid: "89089012783789789719823798127398"
   serviceid: "7c2ed2d8-769e-11ed-9d5f-1e0b0807e20c"
   logdir: "./"

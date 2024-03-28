@@ -6,6 +6,6 @@ COPY miningpool-gateway /app
 
 ENTRYPOINT ["/app/miningpool-gateway"]
 
-EXPOSE 50610 50611 50612 50613
+EXPOSE 50860 50861 50862 50863
 
 CMD ["run"]

@@ -58,16 +58,16 @@ metadata:
 spec:
   ports:
     - name: http
-      port: 50610
-      targetPort: 50610
+      port: 50860
+      targetPort: 50860
     - name: grpc
-      port: 50611
-      targetPort: 50611
+      port: 50861
+      targetPort: 50861
     - name: healthz
-      port: 50612
-      targetPort: 50612
+      port: 50862
+      targetPort: 50862
     - name: prometheus
-      port: 50613
-      targetPort: 50613
+      port: 50863
+      targetPort: 50863
   selector:
     app: miningpool-gateway

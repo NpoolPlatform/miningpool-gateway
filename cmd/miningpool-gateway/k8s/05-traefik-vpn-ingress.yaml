@@ -24,7 +24,7 @@ spec:
           - path: /api/g11n
             backend:
               serviceName: miningpool-gateway
-              servicePort: 50610
+              servicePort: 50860
     - host: api.xpool.top
       http: *http_rules
     - host: api.development.npool.top

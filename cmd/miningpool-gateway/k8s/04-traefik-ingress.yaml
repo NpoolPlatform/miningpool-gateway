@@ -26,19 +26,19 @@ spec:
           - path: /api/g11n/v1/get/applangs
             backend:
               serviceName: miningpool-gateway
-              servicePort: 50610
+              servicePort: 50860
           - path: /api/g11n/v1/get/appcountries
             backend:
               serviceName: miningpool-gateway
-              servicePort: 50610
+              servicePort: 50860
           - path: /api/g11n/v1/get/messages
             backend:
               serviceName: miningpool-gateway
-              servicePort: 50610
+              servicePort: 50860
           - path: /api/g11n/v1/version
             backend:
               serviceName: miningpool-gateway
-              servicePort: 50610
+              servicePort: 50860
     - host: api.procyon.vip
       http: *http_rules
     - host: api.lpsecretbase.com
@@ -97,23 +97,23 @@ spec:
           - path: /api/g11n/v1/create
             backend:
               serviceName: miningpool-gateway
-              servicePort: 50610
+              servicePort: 50860
           - path: /api/g11n/v1/update
             backend:
               serviceName: miningpool-gateway
-              servicePort: 50610
+              servicePort: 50860
           - path: /api/g11n/v1/delete
             backend:
               serviceName: miningpool-gateway
-              servicePort: 50610
+              servicePort: 50860
           - path: /api/g11n/v1/get/app
             backend:
               serviceName: miningpool-gateway
-              servicePort: 50610
+              servicePort: 50860
           - path: /api/g11n/v1/get
             backend:
               serviceName: miningpool-gateway
-              servicePort: 50610
+              servicePort: 50860
     - host: api.procyon.vip
       http: *http_rules
     - host: api.lpsecretbase.com
