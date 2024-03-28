@@ -1,7 +1,7 @@
 pipeline {
   agent any
   environment {
-    GOPROXY = 'https://goproxy.cn,direct'
+    GOPROXY = 'https://goproxy.io,direct'
   }
   tools {
     go 'go'
@@ -64,7 +64,7 @@ pipeline {
         sh 'git clone https://github.com/NpoolPlatform/apollo-base-config.git .apollo-base-config'
         sh(returnStdout: false, script: '''
           PASSWORD=`kubectl get secret --namespace "kube-system" mysql-password-secret -o jsonpath="{.data.rootpassword}" | base64 --decode`
-          kubectl exec --namespace kube-system mysql-0 -- mysql -h 127.0.0.1 -uroot -p$PASSWORD -P3306 -e "create database if not exists g11n_manager;"
+          kubectl exec --namespace kube-system mysql-0 -- mysql -h 127.0.0.1 -uroot -p$PASSWORD -P3306 -e "create database if not exists miningpool_manager;"
 
           username=`helm status rabbitmq --namespace kube-system | grep Username | awk -F ' : ' '{print $2}' | sed 's/"//g'`
           for vhost in `cat cmd/*/*.viper.yaml | grep hostname | awk '{print $2}' | sed 's/"//g' | sed 's/\\./-/g'`; do
@@ -73,7 +73,7 @@ pipeline {
 
             cd .apollo-base-config
             ./apollo-base-config.sh $APP_ID $TARGET_ENV $vhost
-            ./apollo-item-config.sh $APP_ID $TARGET_ENV $vhost database_name g11n_manager
+            ./apollo-item-config.sh $APP_ID $TARGET_ENV $vhost database_name miningpool_manager
             cd -
           done
         '''.stripIndent())
@@ -93,7 +93,7 @@ pipeline {
           kubectl exec --namespace kube-system $devboxpod -- rm -rf /tmp/$servicename || true
           kubectl cp ./ kube-system/$devboxpod:/tmp/$servicename
 
-          kubectl exec --namespace kube-system $devboxpod -- make -C /tmp/$servicename deps before-test test after-test
+          kubectl exec --namespace kube-system $devboxpod -- bash -c "export all_proxy=$all_proxy && make -C /tmp/$servicename deps before-test test after-test"
           kubectl exec --namespace kube-system $devboxpod -- rm -rf /tmp/$servicename
 
           swaggeruipod=`kubectl get pods -A | grep swagger | awk '{print $2}'`
@@ -102,13 +102,28 @@ pipeline {
       }
     }
 
-    stage('Generate docker image for development') {
+    stage('Generate docker image for feature') {
       when {
         expression { BUILD_TARGET == 'true' }
+        expression { BRANCH_NAME != 'master' }
       }
       steps {
         sh 'make verify-build'
-        sh 'DOCKER_REGISTRY=$DOCKER_REGISTRY make generate-docker-images'
+        sh(returnStdout: false, script: '''
+          feature_name=`echo $BRANCH_NAME | awk -F '/' '{ print $2 }'`
+          DEVELOPMENT=$feature_name DOCKER_REGISTRY=$DOCKER_REGISTRY make generate-docker-images
+        '''.stripIndent())
+      }
+    }
+
+    stage('Generate docker image for development') {
+      when {
+        expression { BUILD_TARGET == 'true' }
+        expression { BRANCH_NAME == 'master' }
+      }
+      steps {
+        sh 'make verify-build'
+        sh 'DEVELOPMENT=development DOCKER_REGISTRY=$DOCKER_REGISTRY make generate-docker-images'
       }
     }
 
@@ -122,7 +137,7 @@ pipeline {
           revlist=`git rev-list --tags --max-count=1`
           rc=$?
           set -e
-          if [ 0 -eq $rc -a x"$revlist" != x ]; then
+          if [ 0 -eq $rc ]; then
             tag=`git describe --tags $revlist`
 
             major=`echo $tag | awk -F '.' '{ print $1 }'`
@@ -163,7 +178,7 @@ pipeline {
           revlist=`git rev-list --tags --max-count=1`
           rc=$?
           set -e
-          if [ 0 -eq $rc -a x"$revlist" != x ]; then
+          if [ 0 -eq $rc ]; then
             tag=`git describe --tags $revlist`
 
             major=`echo $tag | awk -F '.' '{ print $1 }'`
@@ -196,7 +211,7 @@ pipeline {
           revlist=`git rev-list --tags --max-count=1`
           rc=$?
           set -e
-          if [ 0 -eq $rc -a x"$revlist" != x ]; then
+          if [ 0 -eq $rc ]; then
             tag=`git describe --tags $revlist`
 
             major=`echo $tag | awk -F '.' '{ print $1 }'`
@@ -237,7 +252,30 @@ pipeline {
           fi
         '''.stripIndent())
         sh 'make verify-build'
-        sh 'DOCKER_REGISTRY=$DOCKER_REGISTRY make generate-docker-images'
+        sh 'DEVELOPMENT=other DOCKER_REGISTRY=$DOCKER_REGISTRY make generate-docker-images'
+      }
+    }
+
+    stage('Release docker image for feature') {
+      when {
+        expression { RELEASE_TARGET == 'true' }
+        expression { BRANCH_NAME != 'master' }
+      }
+      steps {
+        sh(returnStdout: false, script: '''
+          feature_name=`echo $BRANCH_NAME | awk -F '/' '{ print $2 }'`
+          set +e
+          docker images | grep miningpool-gateway | grep $feature_name
+          rc=$?
+          set -e
+          if [ 0 -eq $rc ]; then
+            TAG=$feature_name DOCKER_REGISTRY=$DOCKER_REGISTRY make release-docker-images
+          fi
+          images=`docker images | grep entropypool | grep miningpool-gateway | grep none | awk '{ print $3 }'`
+          for image in $images; do
+            docker rmi $image -f
+          done
+        '''.stripIndent())
       }
     }
 
@@ -247,16 +285,12 @@ pipeline {
       }
       steps {
         sh(returnStdout: false, script: '''
-          branch=latest
-          if [ "x$BRANCH_NAME" != "xmaster" ]; then
-            branch=`echo $BRANCH_NAME | awk -F '/' '{ print $2 }'`
-          fi
           set +e
-          docker images | grep miningpool-gateway | grep $branch
+          docker images | grep miningpool-gateway | grep latest
           rc=$?
           set -e
           if [ 0 -eq $rc ]; then
-            DOCKER_REGISTRY=$DOCKER_REGISTRY make release-docker-images
+            TAG=latest DOCKER_REGISTRY=$DOCKER_REGISTRY make release-docker-images
           fi
           images=`docker images | grep entropypool | grep miningpool-gateway | grep none | awk '{ print $3 }'`
           for image in $images; do
@@ -278,13 +312,13 @@ pipeline {
           set -e
 
           if [ 0 -eq $rc -a x"$revlist" != x ]; then
-            tag=`git tag --sort=-v:refname | grep [1\\|3\\|5\\|7\\|9]$ | head -n1`
+            tag=`git describe --tags $revlist`
             set +e
             docker images | grep miningpool-gateway | grep $tag
             rc=$?
             set -e
             if [ 0 -eq $rc ]; then
-              DOCKER_REGISTRY=$DOCKER_REGISTRY make release-docker-images
+              TAG=$tag DOCKER_REGISTRY=$DOCKER_REGISTRY make release-docker-images
             fi
           fi
         '''.stripIndent())
@@ -303,15 +337,31 @@ pipeline {
           set -e
 
           if [ 0 -eq $rc -a x"$taglist" != x ]; then
-            tag=`git tag --sort=-v:refname | grep [0\\|2\\|4\\|6\\|8]$ | head -n1`
+            tag=`git describe --abbrev=0 --tags $taglist |grep [0\\|2\\|4\\|6\\|8]$ | head -n1`
             set +e
             docker images | grep miningpool-gateway | grep $tag
             rc=$?
             set -e
             if [ 0 -eq $rc ]; then
-              DOCKER_REGISTRY=$DOCKER_REGISTRY make release-docker-images
+              TAG=$tag DOCKER_REGISTRY=$DOCKER_REGISTRY make release-docker-images
             fi
           fi
+        '''.stripIndent())
+      }
+    }
+
+    stage('Deploy for feature') {
+      when {
+        expression { DEPLOY_TARGET == 'true' }
+        expression { TARGET_ENV ==~ /.*development.*/ }
+        expression { BRANCH_NAME != 'master' }
+      }
+      steps {
+        sh(returnStdout: false, script: '''
+          feature_name=`echo $BRANCH_NAME | awk -F '/' '{ print $2 }'`
+          sed -i "s/miningpool-gateway:latest/miningpool-gateway:$feature_name/g" cmd/miningpool-gateway/k8s/02-miningpool-gateway.yaml
+          sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" cmd/miningpool-gateway/k8s/02-miningpool-gateway.yaml
+          TAG=$feature_name make deploy-to-k8s-cluster
         '''.stripIndent())
       }
     }
@@ -320,21 +370,11 @@ pipeline {
       when {
         expression { DEPLOY_TARGET == 'true' }
         expression { TARGET_ENV ==~ /.*development.*/ }
+        expression { BRANCH_NAME == 'master' }
       }
       steps {
-        sh(returnStdout: false, script: '''
-          branch=latest
-          if [ "x$BRANCH_NAME" != "xmaster" ]; then
-            branch=`echo $BRANCH_NAME | awk -F '/' '{ print $2 }'`
-          fi
-          sed -i "s/miningpool-gateway:latest/miningpool-gateway:$branch/g" cmd/miningpool-gateway/k8s/02-miningpool-gateway.yaml
-          sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" cmd/miningpool-gateway/k8s/02-miningpool-gateway.yaml
-          if [ "x$REPLICAS_COUNT" == "x" ];then
-            REPLICAS_COUNT=2
-          fi
-          sed -i "s/replicas: 2/replicas: $REPLICAS_COUNT/g" cmd/miningpool-gateway/k8s/02-miningpool-gateway.yaml
-          make deploy-to-k8s-cluster
-        '''.stripIndent())
+        sh 'sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" cmd/miningpool-gateway/k8s/02-miningpool-gateway.yaml'
+        sh 'TAG=latest make deploy-to-k8s-cluster'
       }
     }
 
@@ -349,21 +389,16 @@ pipeline {
           revlist=`git rev-list --tags --max-count=1`
           rc=$?
           set -e
-          if [ ! 0 -eq $rc -o x"$revlist" == x]; then
+          if [ ! 0 -eq $rc ]; then
             exit 0
           fi
-          tag=`git tag --sort=-v:refname | grep [1\\|3\\|5\\|7\\|9]$ | head -n1`
+          tag=`git describe --tags $revlist`
 
           git reset --hard
           git checkout $tag
           sed -i "s/miningpool-gateway:latest/miningpool-gateway:$tag/g" cmd/miningpool-gateway/k8s/02-miningpool-gateway.yaml
           sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" cmd/miningpool-gateway/k8s/02-miningpool-gateway.yaml
-          if [ "x$REPLICAS_COUNT" == "x" ];then
-            REPLICAS_COUNT=2
-          fi
-          sed -i "s/replicas: 2/replicas: $REPLICAS_COUNT/g" cmd/miningpool-gateway/k8s/02-miningpool-gateway.yaml
-          sed -i "s/imagePullPolicy: Always/imagePullPolicy: IfNotPresent/g" cmd/miningpool-gateway/k8s/02-miningpool-gateway.yaml
-          make deploy-to-k8s-cluster
+          TAG=$tag make deploy-to-k8s-cluster
         '''.stripIndent())
       }
     }
@@ -379,20 +414,15 @@ pipeline {
           taglist=`git rev-list --tags`
           rc=$?
           set -e
-          if [ ! 0 -eq $rc -o x"$revlist" == x]; then
+          if [ ! 0 -eq $rc ]; then
             exit 0
           fi
-          tag=`git tag --sort=-v:refname | grep [0\\|2\\|4\\|6\\|8]$ | head -n1`
+          tag=`git describe --abbrev=0 --tags $taglist |grep [0\\|2\\|4\\|6\\|8]$ | head -n1`
           git reset --hard
           git checkout $tag
           sed -i "s/miningpool-gateway:latest/miningpool-gateway:$tag/g" cmd/miningpool-gateway/k8s/02-miningpool-gateway.yaml
           sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" cmd/miningpool-gateway/k8s/02-miningpool-gateway.yaml
-          if [ "x$REPLICAS_COUNT" == "x" ];then
-            REPLICAS_COUNT=2
-          fi
-          sed -i "s/replicas: 2/replicas: $REPLICAS_COUNT/g" cmd/miningpool-gateway/k8s/02-miningpool-gateway.yaml
-          sed -i "s/imagePullPolicy: Always/imagePullPolicy: IfNotPresent/g" cmd/miningpool-gateway/k8s/02-miningpool-gateway.yaml
-          make deploy-to-k8s-cluster
+          TAG=$tag make deploy-to-k8s-cluster
         '''.stripIndent())
       }
     }
