@@ -10,6 +10,7 @@ import (
 	fractiongwpb "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/fraction"
 	"github.com/NpoolPlatform/message/npool/miningpool/mw/v1/fraction"
 	fractionmwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/fraction"
+	orderusermwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/orderuser"
 )
 
 func (h *Handler) getUser(ctx context.Context) error {
@@ -41,6 +42,15 @@ func (h *Handler) CreateFraction(ctx context.Context) (*fractiongwpb.Fraction, e
 
 	if err := h.getUser(ctx); err != nil {
 		return nil, err
+	}
+
+	orderUser, err := orderusermwcli.GetOrderUser(ctx, *h.OrderUserID)
+	if err != nil {
+		return nil, err
+	}
+
+	if orderUser.AppID != *h.AppID || orderUser.UserID != *h.UserID {
+		return nil, fmt.Errorf("permission denine")
 	}
 
 	info, err := fractionmwcli.CreateFraction(ctx, &fraction.FractionReq{

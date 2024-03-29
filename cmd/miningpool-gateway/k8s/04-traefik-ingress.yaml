@@ -23,19 +23,55 @@ spec:
     - host: api.npool.top
       http: &http_rules
         paths:
-          - path: /api/g11n/v1/get/applangs
+          - path: "/v1/create/apppool"
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
-          - path: /api/g11n/v1/get/appcountries
+          - path: "/v1/get/apppool"
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
-          - path: /api/g11n/v1/get/messages
+          - path: "/v1/get/apppools"
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
-          - path: /api/g11n/v1/version
+          - path: "/v1/get/n/apppools"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
+          - path: "/v1/create/gooduser"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
+          - path: "/v1/get/gooduser"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
+          - path: "/v1/get/goodusers"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
+          - path: "/v1/get/pools"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
+          - path: "/v1/get/pool"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
+          - path: "/v1/create/rootuser"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
+          - path: "/v1/get/rootuser"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
+          - path: "/v1/get/rootusers"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
+          - path: "/v1/update/rootuser"
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
@@ -94,23 +130,31 @@ spec:
     - host: api.npool.top
       http: &http_rules
         paths:
-          - path: /api/g11n/v1/create
+          - path: "/v1/create/fraction"
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
-          - path: /api/g11n/v1/update
+          - path: "/v1/get/fraction"
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
-          - path: /api/g11n/v1/delete
+          - path: "/v1/get/user/fractions"
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
-          - path: /api/g11n/v1/get/app
+          - path: "/v1/update/gooduser"
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
-          - path: /api/g11n/v1/get
+          - path: "/v1/get/orderuser"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
+          - path: "/v1/setup/revenueaddress"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
+          - path: "/v1/setup/autopay"
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
