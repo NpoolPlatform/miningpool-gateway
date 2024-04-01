@@ -2,6 +2,7 @@ package pool
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
 	v1 "github.com/NpoolPlatform/message/npool/basetypes/v1"
@@ -58,6 +59,8 @@ func (h *Handler) GetPool(ctx context.Context) (*poolgwpb.Pool, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	if info == nil {
+		return nil, fmt.Errorf("invalid pool")
+	}
 	return h.fullPools(ctx, info)
 }

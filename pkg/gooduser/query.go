@@ -2,6 +2,7 @@ package gooduser
 
 import (
 	"context"
+	"fmt"
 
 	goodusergwpb "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/gooduser"
 	goodusermwpb "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/gooduser"
@@ -20,6 +21,9 @@ func (h *Handler) GetGoodUser(ctx context.Context) (*goodusergwpb.GoodUser, erro
 	info, err := goodusermwcli.GetGoodUser(ctx, *h.EntID)
 	if err != nil {
 		return nil, err
+	}
+	if info == nil {
+		return nil, fmt.Errorf("invalid gooduser")
 	}
 	return mw2GW(info), nil
 }

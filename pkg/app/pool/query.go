@@ -71,6 +71,9 @@ func (h *Handler) GetPool(ctx context.Context) (*poolgwpb.Pool, error) {
 	if err != nil {
 		return nil, err
 	}
+	if info == nil {
+		return nil, fmt.Errorf("invalid app pool")
+	}
 	if info.AppID != *h.AppID {
 		return nil, fmt.Errorf("permission denied")
 	}
