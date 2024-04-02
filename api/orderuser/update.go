@@ -59,7 +59,7 @@ func (s *Server) SetupAutoPay(ctx context.Context, in *npool.SetupAutoPayRequest
 		return &npool.SetupAutoPayResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
-	info, err := handler.SetupRevenueAddress(ctx)
+	info, err := handler.SetupAutoPay(ctx)
 	if err != nil {
 		logger.Sugar().Errorw(
 			"SetupAutoPay",
