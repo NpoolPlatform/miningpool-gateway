@@ -27,31 +27,17 @@ func (h *Handler) checkAuth(ctx context.Context) (*orderusermwpb.OrderUser, erro
 	return info, nil
 }
 
-func (h *Handler) SetupRevenueAddress(ctx context.Context) (*orderusergwpb.OrderUser, error) {
+func (h *Handler) UpdateOrderUser(ctx context.Context) (*orderusergwpb.OrderUser, error) {
 	info, err := h.checkAuth(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	_info, err := orderusermwcli.SetupRevenueAddress(ctx, &orderusermwpb.SetupRevenueAddressRequest{
-		EntID:          info.EntID,
-		RevenueAddress: *h.RevenueAddress,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return mw2GW(_info), nil
-}
-
-func (h *Handler) SetupAutoPay(ctx context.Context) (*orderusergwpb.OrderUser, error) {
-	info, err := h.checkAuth(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	_info, err := orderusermwcli.SetupAutoPay(ctx, &orderusermwpb.SetupAutoPayRequest{
-		EntID:   info.EntID,
-		AutoPay: *h.AutoPay,
+	_info, err := orderusermwcli.UpdateOrderUser(ctx, &orderusermwpb.OrderUserReq{
+		ID:             &info.ID,
+		EntID:          &info.EntID,
+		RevenueAddress: h.RevenueAddress,
+		AutoPay:        h.AutoPay,
 	})
 	if err != nil {
 		return nil, err

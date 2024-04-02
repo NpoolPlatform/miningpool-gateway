@@ -40,6 +40,10 @@ spec:
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
+          - path: "/api/miningpool/v1/delete/apppool"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
           - path: "/api/miningpool/v1/create/gooduser"
             backend:
               serviceName: miningpool-gateway
@@ -53,6 +57,10 @@ spec:
               serviceName: miningpool-gateway
               servicePort: 50860
           - path: "/api/miningpool/v1/update/gooduser"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
+          - path: "/api/miningpool/v1/delete/gooduser"
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
@@ -77,6 +85,10 @@ spec:
               serviceName: miningpool-gateway
               servicePort: 50860
           - path: "/api/miningpool/v1/update/rootuser"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
+          - path: "/api/miningpool/v1/delete/rootuser"
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
@@ -151,11 +163,7 @@ spec:
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
-          - path: "/api/miningpool/v1/setup/revenueaddress"
-            backend:
-              serviceName: miningpool-gateway
-              servicePort: 50860
-          - path: "/api/miningpool/v1/setup/autopay"
+          - path: "/api/miningpool/v1/update/orderuser"
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860

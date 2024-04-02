@@ -12,32 +12,33 @@ import (
 	npool "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/app/pool"
 )
 
-func (s *Server) CreatePool(ctx context.Context, in *npool.CreatePoolRequest) (*npool.CreatePoolResponse, error) {
+//nolint:dupl
+func (s *Server) DeletePool(ctx context.Context, in *npool.DeletePoolRequest) (*npool.DeletePoolResponse, error) {
 	handler, err := pool1.NewHandler(
 		ctx,
-		pool1.WithPoolID(&in.PoolID, true),
-		pool1.WithTargetAppID(&in.TargetAppID, true),
+		pool1.WithID(&in.ID, true),
+		pool1.WithEntID(&in.EntID, true),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(
-			"CreatePool",
+			"DeletePool",
 			"In", in,
 			"Error", err,
 		)
-		return &npool.CreatePoolResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.DeletePoolResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
-	info, err := handler.CreatePool(ctx)
+	info, err := handler.DeletePool(ctx)
 	if err != nil {
 		logger.Sugar().Errorw(
-			"CreatePool",
+			"DeletePool",
 			"In", in,
 			"Error", err,
 		)
-		return &npool.CreatePoolResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.DeletePoolResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
-	return &npool.CreatePoolResponse{
+	return &npool.DeletePoolResponse{
 		Info: info,
 	}, nil
 }
