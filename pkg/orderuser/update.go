@@ -13,7 +13,6 @@ import (
 
 func (h *Handler) checkAuth(ctx context.Context) (*orderusermwpb.OrderUser, error) {
 	info, err := orderusermwcli.GetOrderUserOnly(ctx, &orderusermwpb.Conds{
-		ID:    &basetypes.Uint32Val{Op: cruder.EQ, Value: *h.ID},
 		EntID: &basetypes.StringVal{Op: cruder.EQ, Value: *h.EntID},
 	})
 	if err != nil {
