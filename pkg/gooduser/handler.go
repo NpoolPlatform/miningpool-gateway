@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	rootusemwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/rootuser"
+
 	basetypes "github.com/NpoolPlatform/message/npool/basetypes/miningpool/v1"
 	goodusergw "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/gooduser"
 	goodusermw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/gooduser"
@@ -13,7 +15,6 @@ import (
 type Handler struct {
 	ID             *uint32
 	EntID          *string
-	GoodID         *string
 	RootUserID     *string
 	Name           *string
 	MiningpoolType *basetypes.MiningpoolType
@@ -93,20 +94,14 @@ func WithRootUserID(id *string, must bool) func(context.Context, *Handler) error
 			}
 			return nil
 		}
-		h.RootUserID = id
-		return nil
-	}
-}
-
-func WithGoodID(id *string, must bool) func(context.Context, *Handler) error {
-	return func(ctx context.Context, h *Handler) error {
-		if id == nil {
-			if must {
-				return fmt.Errorf("invalid goodid")
-			}
-			return nil
+		exist, err := rootusemwcli.ExistRootUser(ctx, *id)
+		if err != nil {
+			return err
 		}
-		h.GoodID = id
+		if !exist {
+			return fmt.Errorf("invalid rootuser")
+		}
+		h.RootUserID = id
 		return nil
 	}
 }

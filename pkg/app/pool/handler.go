@@ -4,11 +4,15 @@ import (
 	"context"
 	"fmt"
 
+	appmwcli "github.com/NpoolPlatform/appuser-middleware/pkg/client/app"
+	poolmwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/pool"
+
 	poolgw "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/app/pool"
 	apppoolmw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/app/pool"
 	coinmw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/coin"
 	fractionrulemw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/fractionrule"
 	poolmw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/pool"
+
 	constant "github.com/NpoolPlatform/miningpool-gateway/pkg/const"
 )
 
@@ -103,6 +107,13 @@ func WithAppID(id *string, must bool) func(context.Context, *Handler) error {
 			}
 			return nil
 		}
+		exist, err := appmwcli.ExistApp(ctx, *id)
+		if err != nil {
+			return err
+		}
+		if !exist {
+			return fmt.Errorf("invalid app")
+		}
 		h.AppID = id
 		return nil
 	}
@@ -116,6 +127,13 @@ func WithPoolID(id *string, must bool) func(context.Context, *Handler) error {
 			}
 			return nil
 		}
+		exist, err := poolmwcli.ExistPool(ctx, *id)
+		if err != nil {
+			return err
+		}
+		if !exist {
+			return fmt.Errorf("invalid pool")
+		}
 		h.PoolID = id
 		return nil
 	}
@@ -128,6 +146,13 @@ func WithTargetAppID(id *string, must bool) func(context.Context, *Handler) erro
 				return fmt.Errorf("invalid targetappid")
 			}
 			return nil
+		}
+		exist, err := appmwcli.ExistApp(ctx, *id)
+		if err != nil {
+			return err
+		}
+		if !exist {
+			return fmt.Errorf("invalid app")
 		}
 		h.TargetAppID = id
 		return nil

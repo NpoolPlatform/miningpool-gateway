@@ -8,9 +8,9 @@ import (
 )
 
 func (h *Handler) DeletePool(ctx context.Context) (*poolgwpb.Pool, error) {
-	info, err := apppoolmwcli.DeletePool(ctx, *h.ID)
+	_, err := apppoolmwcli.DeletePool(ctx, *h.ID)
 	if err != nil {
 		return nil, err
 	}
-	return h.fullPools(ctx, info)
+	return nil, nil
 }

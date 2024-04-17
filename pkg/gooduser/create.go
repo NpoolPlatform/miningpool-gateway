@@ -11,12 +11,11 @@ import (
 )
 
 func (h *Handler) CreateGoodUser(ctx context.Context) (*goodusergwpb.GoodUser, error) {
-	id := uuid.NewString()
 	if h.EntID == nil {
-		h.EntID = &id
+		h.EntID = func() *string { s := uuid.NewString(); return &s }()
 	}
 
-	info, err := goodusermwcli.CreateGoodUser(ctx, &goodusermwpb.GoodUserReq{
+	_, err := goodusermwcli.CreateGoodUser(ctx, &goodusermwpb.GoodUserReq{
 		EntID:       h.EntID,
 		RootUserID:  h.RootUserID,
 		CoinType:    h.CoinType,
@@ -27,5 +26,5 @@ func (h *Handler) CreateGoodUser(ctx context.Context) (*goodusergwpb.GoodUser, e
 		return nil, err
 	}
 
-	return mw2GW(info), nil
+	return h.GetGoodUser(ctx)
 }

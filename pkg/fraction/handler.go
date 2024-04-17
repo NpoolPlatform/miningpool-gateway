@@ -4,6 +4,10 @@ import (
 	"context"
 	"fmt"
 
+	appmwcli "github.com/NpoolPlatform/appuser-middleware/pkg/client/app"
+	usermwcli "github.com/NpoolPlatform/appuser-middleware/pkg/client/user"
+	orderusemwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/orderuser"
+
 	basetypes "github.com/NpoolPlatform/message/npool/basetypes/miningpool/v1"
 	fractiongw "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/fraction"
 	fractionmw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/fraction"
@@ -92,6 +96,13 @@ func WithAppID(id *string, must bool) func(context.Context, *Handler) error {
 			}
 			return nil
 		}
+		exist, err := appmwcli.ExistApp(ctx, *id)
+		if err != nil {
+			return err
+		}
+		if !exist {
+			return fmt.Errorf("invalid appid")
+		}
 		h.AppID = id
 		return nil
 	}
@@ -105,6 +116,19 @@ func WithUserID(id *string, must bool) func(context.Context, *Handler) error {
 			}
 			return nil
 		}
+
+		if h.AppID == nil {
+			return fmt.Errorf("invalid appid")
+		}
+
+		exist, err := usermwcli.ExistUser(ctx, *h.AppID, *id)
+		if err != nil {
+			return err
+		}
+		if !exist {
+			return fmt.Errorf("invalid user")
+		}
+
 		h.UserID = id
 		return nil
 	}
@@ -117,6 +141,13 @@ func WithOrderUserID(id *string, must bool) func(context.Context, *Handler) erro
 				return fmt.Errorf("invalid orderuserid")
 			}
 			return nil
+		}
+		exist, err := orderusemwcli.ExistOrderUser(ctx, *id)
+		if err != nil {
+			return err
+		}
+		if !exist {
+			return fmt.Errorf("invalid orderuser")
 		}
 		h.OrderUserID = id
 		return nil

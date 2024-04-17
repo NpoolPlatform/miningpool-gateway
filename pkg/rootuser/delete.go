@@ -23,9 +23,9 @@ func (h *Handler) DeleteRootUser(ctx context.Context) (*rootusergwpb.RootUser, e
 		return nil, fmt.Errorf("invalid rootuser")
 	}
 
-	_info, err := rootusermwcli.DeleteRootUser(ctx, *h.ID)
+	_, err = rootusermwcli.DeleteRootUser(ctx, *h.ID)
 	if err != nil {
 		return nil, err
 	}
-	return mw2GW(_info), nil
+	return nil, nil
 }

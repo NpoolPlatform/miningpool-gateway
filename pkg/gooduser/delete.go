@@ -23,9 +23,9 @@ func (h *Handler) DeleteGoodUser(ctx context.Context) (*goodusergwpb.GoodUser, e
 		return nil, fmt.Errorf("invalid gooduser")
 	}
 
-	_info, err := goodusermwcli.DeleteGoodUser(ctx, info.ID)
+	_, err = goodusermwcli.DeleteGoodUser(ctx, info.ID)
 	if err != nil {
 		return nil, err
 	}
-	return mw2GW(_info), nil
+	return nil, nil
 }
