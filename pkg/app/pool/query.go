@@ -90,5 +90,5 @@ func (h *Handler) GetPool(ctx context.Context) (*poolgwpb.Pool, error) {
 		return nil, fmt.Errorf("permission denied")
 	}
 
-	return fullPools(ctx, info.EntID)
+	return fullPools(ctx, info.PoolID)
 }
