@@ -29,7 +29,7 @@ func (h *Handler) GetPools(ctx context.Context) ([]*poolgwpb.Pool, uint32, error
 
 	_infos := []*poolgwpb.Pool{}
 	for _, info := range infos {
-		_info, err := fullPools(ctx, info.EntID)
+		_info, err := fullPools(ctx, info.PoolID)
 		if err != nil {
 			return nil, 0, err
 		}
