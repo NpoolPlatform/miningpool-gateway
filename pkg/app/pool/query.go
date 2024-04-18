@@ -29,7 +29,7 @@ func (h *Handler) GetPools(ctx context.Context) ([]*poolgwpb.Pool, uint32, error
 
 	_infos := []*poolgwpb.Pool{}
 	for _, info := range infos {
-		_info, err := fullPools(ctx, info.PoolID)
+		_info, err := fullPools(ctx, info.EntID)
 		if err != nil {
 			return nil, 0, err
 		}
@@ -90,5 +90,5 @@ func (h *Handler) GetPool(ctx context.Context) (*poolgwpb.Pool, error) {
 		return nil, fmt.Errorf("permission denied")
 	}
 
-	return fullPools(ctx, info.PoolID)
+	return fullPools(ctx, info.EntID)
 }
