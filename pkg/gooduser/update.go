@@ -23,8 +23,9 @@ func (h *Handler) UpdateGoodUser(ctx context.Context) (*goodusergwpb.GoodUser, e
 		return nil, fmt.Errorf("invalid gooduser")
 	}
 
-	_info, err := goodusermwcli.UpdateGoodUser(ctx, &goodusermwpb.GoodUserReq{
+	_, err = goodusermwcli.UpdateGoodUser(ctx, &goodusermwpb.GoodUserReq{
 		ID:          h.ID,
+		EntID:       h.EntID,
 		RootUserID:  h.RootUserID,
 		HashRate:    h.HashRate,
 		RevenueType: h.RevenueType,
@@ -32,5 +33,5 @@ func (h *Handler) UpdateGoodUser(ctx context.Context) (*goodusergwpb.GoodUser, e
 	if err != nil {
 		return nil, err
 	}
-	return mw2GW(_info), nil
+	return h.GetGoodUser(ctx)
 }

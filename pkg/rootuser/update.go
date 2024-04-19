@@ -23,8 +23,9 @@ func (h *Handler) UpdateRootUser(ctx context.Context) (*rootusergwpb.RootUser, e
 		return nil, fmt.Errorf("invalid rootuser")
 	}
 
-	_info, err := rootusermwcli.UpdateRootUser(ctx, &rootusermwpb.RootUserReq{
+	_, err = rootusermwcli.UpdateRootUser(ctx, &rootusermwpb.RootUserReq{
 		ID:             h.ID,
+		EntID:          h.EntID,
 		Name:           h.Name,
 		MiningpoolType: h.MiningpoolType,
 		Email:          h.Email,
@@ -35,5 +36,5 @@ func (h *Handler) UpdateRootUser(ctx context.Context) (*rootusergwpb.RootUser, e
 	if err != nil {
 		return nil, err
 	}
-	return mw2GW(_info), nil
+	return h.GetRootUser(ctx)
 }
