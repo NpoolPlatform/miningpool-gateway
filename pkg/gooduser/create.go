@@ -15,7 +15,7 @@ func (h *Handler) CreateGoodUser(ctx context.Context) (*goodusergwpb.GoodUser, e
 		h.EntID = func() *string { s := uuid.NewString(); return &s }()
 	}
 
-	_, err := goodusermwcli.CreateGoodUser(ctx, &goodusermwpb.GoodUserReq{
+	err := goodusermwcli.CreateGoodUser(ctx, &goodusermwpb.GoodUserReq{
 		EntID:       h.EntID,
 		RootUserID:  h.RootUserID,
 		CoinType:    h.CoinType,

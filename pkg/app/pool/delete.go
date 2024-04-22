@@ -8,9 +8,14 @@ import (
 )
 
 func (h *Handler) DeletePool(ctx context.Context) (*poolgwpb.Pool, error) {
-	_, err := apppoolmwcli.DeletePool(ctx, *h.ID, *h.EntID)
+	info, err := fullPools(ctx, *h.EntID)
 	if err != nil {
 		return nil, err
 	}
-	return nil, nil
+
+	err = apppoolmwcli.DeletePool(ctx, *h.ID, *h.EntID)
+	if err != nil {
+		return nil, err
+	}
+	return info, nil
 }

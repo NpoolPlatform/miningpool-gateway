@@ -58,7 +58,7 @@ func (h *Handler) CreateFraction(ctx context.Context) (*fractiongwpb.Fraction, e
 		h.EntID = func() *string { s := uuid.NewString(); return &s }()
 	}
 
-	info, err := fractionmwcli.CreateFraction(ctx, &fraction.FractionReq{
+	err = fractionmwcli.CreateFraction(ctx, &fraction.FractionReq{
 		EntID:       h.EntID,
 		AppID:       h.AppID,
 		UserID:      h.UserID,
@@ -66,12 +66,6 @@ func (h *Handler) CreateFraction(ctx context.Context) (*fractiongwpb.Fraction, e
 	})
 	if err != nil {
 		return nil, err
-	}
-	if info == nil {
-		return nil, fmt.Errorf("invalid fraction")
-	}
-	if info.UserID != *h.UserID || info.AppID != *h.AppID {
-		return nil, fmt.Errorf("permission denied")
 	}
 
 	return h.GetFraction(ctx)

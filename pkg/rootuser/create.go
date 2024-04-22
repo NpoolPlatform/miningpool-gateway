@@ -15,7 +15,7 @@ func (h *Handler) CreateRootUser(ctx context.Context) (*rootusergwpb.RootUser, e
 		h.EntID = func() *string { s := uuid.NewString(); return &s }()
 	}
 
-	_, err := rootusermwcli.CreateRootUser(ctx, &rootusermwpb.RootUserReq{
+	err := rootusermwcli.CreateRootUser(ctx, &rootusermwpb.RootUserReq{
 		EntID:          h.EntID,
 		Name:           h.Name,
 		MiningpoolType: h.MiningpoolType,

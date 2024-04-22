@@ -8,9 +8,13 @@ import (
 )
 
 func (h *Handler) DeleteGoodUser(ctx context.Context) (*goodusergwpb.GoodUser, error) {
-	_, err := goodusermwcli.DeleteGoodUser(ctx, *h.ID, *h.EntID)
+	info, err := goodusermwcli.GetGoodUser(ctx, *h.EntID)
 	if err != nil {
 		return nil, err
 	}
-	return nil, nil
+	err = goodusermwcli.DeleteGoodUser(ctx, *h.ID, *h.EntID)
+	if err != nil {
+		return nil, err
+	}
+	return mw2GW(info), nil
 }

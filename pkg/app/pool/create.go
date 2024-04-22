@@ -14,7 +14,7 @@ func (h *Handler) CreatePool(ctx context.Context) (*poolgwpb.Pool, error) {
 		h.EntID = func() *string { s := uuid.NewString(); return &s }()
 	}
 
-	_, err := apppoolmwcli.CreatePool(ctx, &pool.PoolReq{
+	err := apppoolmwcli.CreatePool(ctx, &pool.PoolReq{
 		EntID:  h.EntID,
 		AppID:  h.TargetAppID,
 		PoolID: h.PoolID,
