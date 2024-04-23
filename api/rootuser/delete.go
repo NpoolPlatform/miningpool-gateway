@@ -12,7 +12,7 @@ import (
 	npool "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/rootuser"
 )
 
-func (s *Server) DeleteRootUser(ctx context.Context, in *npool.DeleteRootUserRequest) (*npool.DeleteRootUserResponse, error) {
+func (s *Server) AdminDeleteRootUser(ctx context.Context, in *npool.AdminDeleteRootUserRequest) (*npool.AdminDeleteRootUserResponse, error) {
 	handler, err := rootuser1.NewHandler(
 		ctx,
 		rootuser1.WithID(&in.ID, true),
@@ -24,7 +24,7 @@ func (s *Server) DeleteRootUser(ctx context.Context, in *npool.DeleteRootUserReq
 			"In", in,
 			"Error", err,
 		)
-		return &npool.DeleteRootUserResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminDeleteRootUserResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
 	info, err := handler.DeleteRootUser(ctx)
@@ -34,10 +34,10 @@ func (s *Server) DeleteRootUser(ctx context.Context, in *npool.DeleteRootUserReq
 			"In", in,
 			"Error", err,
 		)
-		return &npool.DeleteRootUserResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminDeleteRootUserResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
-	return &npool.DeleteRootUserResponse{
+	return &npool.AdminDeleteRootUserResponse{
 		Info: info,
 	}, nil
 }

@@ -34,9 +34,6 @@ func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) 
 }
 
 func mw2GW(info *rootusermw.RootUser) *rootusergw.RootUser {
-	if info == nil {
-		return nil
-	}
 	return &rootusergw.RootUser{
 		ID:             info.ID,
 		EntID:          info.EntID,

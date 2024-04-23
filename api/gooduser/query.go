@@ -12,7 +12,7 @@ import (
 	npool "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/gooduser"
 )
 
-func (s *Server) GetGoodUser(ctx context.Context, in *npool.GetGoodUserRequest) (*npool.GetGoodUserResponse, error) {
+func (s *Server) AdminGetGoodUser(ctx context.Context, in *npool.AdminGetGoodUserRequest) (*npool.AdminGetGoodUserResponse, error) {
 	handler, err := gooduser1.NewHandler(
 		ctx,
 		gooduser1.WithEntID(&in.EntID, true),
@@ -23,7 +23,7 @@ func (s *Server) GetGoodUser(ctx context.Context, in *npool.GetGoodUserRequest) 
 			"In", in,
 			"Error", err,
 		)
-		return &npool.GetGoodUserResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminGetGoodUserResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
 	info, err := handler.GetGoodUser(ctx)
@@ -33,15 +33,15 @@ func (s *Server) GetGoodUser(ctx context.Context, in *npool.GetGoodUserRequest) 
 			"In", in,
 			"Error", err,
 		)
-		return &npool.GetGoodUserResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminGetGoodUserResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
-	return &npool.GetGoodUserResponse{
+	return &npool.AdminGetGoodUserResponse{
 		Info: info,
 	}, nil
 }
 
-func (s *Server) GetGoodUsers(ctx context.Context, in *npool.GetGoodUsersRequest) (*npool.GetGoodUsersResponse, error) {
+func (s *Server) AdminGetGoodUsers(ctx context.Context, in *npool.AdminGetGoodUsersRequest) (*npool.AdminGetGoodUsersResponse, error) {
 	handler, err := gooduser1.NewHandler(
 		ctx,
 		gooduser1.WithOffset(in.Offset),
@@ -53,7 +53,7 @@ func (s *Server) GetGoodUsers(ctx context.Context, in *npool.GetGoodUsersRequest
 			"In", in,
 			"Error", err,
 		)
-		return &npool.GetGoodUsersResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminGetGoodUsersResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
 	infos, total, err := handler.GetGoodUsers(ctx)
@@ -63,10 +63,10 @@ func (s *Server) GetGoodUsers(ctx context.Context, in *npool.GetGoodUsersRequest
 			"In", in,
 			"Error", err,
 		)
-		return &npool.GetGoodUsersResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminGetGoodUsersResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
-	return &npool.GetGoodUsersResponse{
+	return &npool.AdminGetGoodUsersResponse{
 		Infos: infos,
 		Total: total,
 	}, nil

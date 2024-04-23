@@ -13,7 +13,7 @@ import (
 )
 
 //nolint:dupl
-func (s *Server) DeletePool(ctx context.Context, in *npool.DeletePoolRequest) (*npool.DeletePoolResponse, error) {
+func (s *Server) AdminDeletePool(ctx context.Context, in *npool.AdminDeletePoolRequest) (*npool.AdminDeletePoolResponse, error) {
 	handler, err := pool1.NewHandler(
 		ctx,
 		pool1.WithID(&in.ID, true),
@@ -25,7 +25,7 @@ func (s *Server) DeletePool(ctx context.Context, in *npool.DeletePoolRequest) (*
 			"In", in,
 			"Error", err,
 		)
-		return &npool.DeletePoolResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminDeletePoolResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
 	info, err := handler.DeletePool(ctx)
@@ -35,10 +35,10 @@ func (s *Server) DeletePool(ctx context.Context, in *npool.DeletePoolRequest) (*
 			"In", in,
 			"Error", err,
 		)
-		return &npool.DeletePoolResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminDeletePoolResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
-	return &npool.DeletePoolResponse{
+	return &npool.AdminDeletePoolResponse{
 		Info: info,
 	}, nil
 }

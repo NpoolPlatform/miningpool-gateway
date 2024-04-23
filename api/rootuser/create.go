@@ -12,7 +12,7 @@ import (
 	npool "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/rootuser"
 )
 
-func (s *Server) CreateRootUser(ctx context.Context, in *npool.CreateRootUserRequest) (*npool.CreateRootUserResponse, error) {
+func (s *Server) AdminCreateRootUser(ctx context.Context, in *npool.AdminCreateRootUserRequest) (*npool.AdminCreateRootUserResponse, error) {
 	handler, err := rootuser1.NewHandler(
 		ctx,
 		rootuser1.WithName(&in.Name, true),
@@ -27,7 +27,7 @@ func (s *Server) CreateRootUser(ctx context.Context, in *npool.CreateRootUserReq
 			"In", in,
 			"Error", err,
 		)
-		return &npool.CreateRootUserResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminCreateRootUserResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
 	info, err := handler.CreateRootUser(ctx)
@@ -37,10 +37,10 @@ func (s *Server) CreateRootUser(ctx context.Context, in *npool.CreateRootUserReq
 			"In", in,
 			"Error", err,
 		)
-		return &npool.CreateRootUserResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminCreateRootUserResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
-	return &npool.CreateRootUserResponse{
+	return &npool.AdminCreateRootUserResponse{
 		Info: info,
 	}, nil
 }

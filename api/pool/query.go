@@ -12,7 +12,7 @@ import (
 	npool "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/pool"
 )
 
-func (s *Server) GetPool(ctx context.Context, in *npool.GetPoolRequest) (*npool.GetPoolResponse, error) {
+func (s *Server) AdminGetPool(ctx context.Context, in *npool.AdminGetPoolRequest) (*npool.AdminGetPoolResponse, error) {
 	handler, err := pool1.NewHandler(
 		ctx,
 		pool1.WithEntID(&in.EntID, true),
@@ -23,7 +23,7 @@ func (s *Server) GetPool(ctx context.Context, in *npool.GetPoolRequest) (*npool.
 			"In", in,
 			"Error", err,
 		)
-		return &npool.GetPoolResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminGetPoolResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
 	info, err := handler.GetPool(ctx)
@@ -33,15 +33,15 @@ func (s *Server) GetPool(ctx context.Context, in *npool.GetPoolRequest) (*npool.
 			"In", in,
 			"Error", err,
 		)
-		return &npool.GetPoolResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminGetPoolResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
-	return &npool.GetPoolResponse{
+	return &npool.AdminGetPoolResponse{
 		Info: info,
 	}, nil
 }
 
-func (s *Server) GetPools(ctx context.Context, in *npool.GetPoolsRequest) (*npool.GetPoolsResponse, error) {
+func (s *Server) AdminGetPools(ctx context.Context, in *npool.AdminGetPoolsRequest) (*npool.AdminGetPoolsResponse, error) {
 	handler, err := pool1.NewHandler(
 		ctx,
 		pool1.WithOffset(in.Offset),
@@ -53,7 +53,7 @@ func (s *Server) GetPools(ctx context.Context, in *npool.GetPoolsRequest) (*npoo
 			"In", in,
 			"Error", err,
 		)
-		return &npool.GetPoolsResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminGetPoolsResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
 	infos, total, err := handler.GetPools(ctx)
@@ -63,10 +63,10 @@ func (s *Server) GetPools(ctx context.Context, in *npool.GetPoolsRequest) (*npoo
 			"In", in,
 			"Error", err,
 		)
-		return &npool.GetPoolsResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminGetPoolsResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
-	return &npool.GetPoolsResponse{
+	return &npool.AdminGetPoolsResponse{
 		Infos: infos,
 		Total: total,
 	}, nil

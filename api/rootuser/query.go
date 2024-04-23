@@ -12,7 +12,7 @@ import (
 	npool "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/rootuser"
 )
 
-func (s *Server) GetRootUser(ctx context.Context, in *npool.GetRootUserRequest) (*npool.GetRootUserResponse, error) {
+func (s *Server) AdminGetRootUser(ctx context.Context, in *npool.AdminGetRootUserRequest) (*npool.AdminGetRootUserResponse, error) {
 	handler, err := rootuser1.NewHandler(
 		ctx,
 		rootuser1.WithEntID(&in.EntID, true),
@@ -23,7 +23,7 @@ func (s *Server) GetRootUser(ctx context.Context, in *npool.GetRootUserRequest) 
 			"In", in,
 			"Error", err,
 		)
-		return &npool.GetRootUserResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminGetRootUserResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
 	info, err := handler.GetRootUser(ctx)
@@ -33,15 +33,15 @@ func (s *Server) GetRootUser(ctx context.Context, in *npool.GetRootUserRequest) 
 			"In", in,
 			"Error", err,
 		)
-		return &npool.GetRootUserResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminGetRootUserResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
-	return &npool.GetRootUserResponse{
+	return &npool.AdminGetRootUserResponse{
 		Info: info,
 	}, nil
 }
 
-func (s *Server) GetRootUsers(ctx context.Context, in *npool.GetRootUsersRequest) (*npool.GetRootUsersResponse, error) {
+func (s *Server) AdminGetRootUsers(ctx context.Context, in *npool.AdminGetRootUsersRequest) (*npool.AdminGetRootUsersResponse, error) {
 	handler, err := rootuser1.NewHandler(
 		ctx,
 		rootuser1.WithOffset(in.Offset),
@@ -53,7 +53,7 @@ func (s *Server) GetRootUsers(ctx context.Context, in *npool.GetRootUsersRequest
 			"In", in,
 			"Error", err,
 		)
-		return &npool.GetRootUsersResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminGetRootUsersResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
 	infos, total, err := handler.GetRootUsers(ctx)
@@ -63,10 +63,10 @@ func (s *Server) GetRootUsers(ctx context.Context, in *npool.GetRootUsersRequest
 			"In", in,
 			"Error", err,
 		)
-		return &npool.GetRootUsersResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminGetRootUsersResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
-	return &npool.GetRootUsersResponse{
+	return &npool.AdminGetRootUsersResponse{
 		Infos: infos,
 		Total: total,
 	}, nil

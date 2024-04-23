@@ -12,7 +12,7 @@ import (
 	npool "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/gooduser"
 )
 
-func (s *Server) DeleteGoodUser(ctx context.Context, in *npool.DeleteGoodUserRequest) (*npool.DeleteGoodUserResponse, error) {
+func (s *Server) AdminDeleteGoodUser(ctx context.Context, in *npool.AdminDeleteGoodUserRequest) (*npool.AdminDeleteGoodUserResponse, error) {
 	handler, err := gooduser1.NewHandler(
 		ctx,
 		gooduser1.WithID(&in.ID, true),
@@ -24,7 +24,7 @@ func (s *Server) DeleteGoodUser(ctx context.Context, in *npool.DeleteGoodUserReq
 			"In", in,
 			"Error", err,
 		)
-		return &npool.DeleteGoodUserResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminDeleteGoodUserResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
 	info, err := handler.DeleteGoodUser(ctx)
@@ -34,10 +34,10 @@ func (s *Server) DeleteGoodUser(ctx context.Context, in *npool.DeleteGoodUserReq
 			"In", in,
 			"Error", err,
 		)
-		return &npool.DeleteGoodUserResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminDeleteGoodUserResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
-	return &npool.DeleteGoodUserResponse{
+	return &npool.AdminDeleteGoodUserResponse{
 		Info: info,
 	}, nil
 }

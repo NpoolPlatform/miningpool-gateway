@@ -23,7 +23,7 @@ func (h *Handler) UpdateRootUser(ctx context.Context) (*rootusergwpb.RootUser, e
 		return nil, fmt.Errorf("invalid rootuser")
 	}
 
-	_, err = rootusermwcli.UpdateRootUser(ctx, &rootusermwpb.RootUserReq{
+	err = rootusermwcli.UpdateRootUser(ctx, &rootusermwpb.RootUserReq{
 		ID:             h.ID,
 		EntID:          h.EntID,
 		Name:           h.Name,

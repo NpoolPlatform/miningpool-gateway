@@ -12,7 +12,7 @@ import (
 	npool "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/gooduser"
 )
 
-func (s *Server) UpdateGoodUser(ctx context.Context, in *npool.UpdateGoodUserRequest) (*npool.UpdateGoodUserResponse, error) {
+func (s *Server) AdminUpdateGoodUser(ctx context.Context, in *npool.AdminUpdateGoodUserRequest) (*npool.AdminUpdateGoodUserResponse, error) {
 	handler, err := gooduser1.NewHandler(
 		ctx,
 		gooduser1.WithID(&in.ID, true),
@@ -26,7 +26,7 @@ func (s *Server) UpdateGoodUser(ctx context.Context, in *npool.UpdateGoodUserReq
 			"In", in,
 			"Error", err,
 		)
-		return &npool.UpdateGoodUserResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminUpdateGoodUserResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
 	info, err := handler.UpdateGoodUser(ctx)
@@ -36,10 +36,10 @@ func (s *Server) UpdateGoodUser(ctx context.Context, in *npool.UpdateGoodUserReq
 			"In", in,
 			"Error", err,
 		)
-		return &npool.UpdateGoodUserResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminUpdateGoodUserResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
-	return &npool.UpdateGoodUserResponse{
+	return &npool.AdminUpdateGoodUserResponse{
 		Info: info,
 	}, nil
 }
