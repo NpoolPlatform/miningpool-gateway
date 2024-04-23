@@ -39,6 +39,9 @@ func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) 
 }
 
 func mw2GW(info *fractionmw.Fraction) *fractiongw.Fraction {
+	if info == nil {
+		return nil
+	}
 	return &fractiongw.Fraction{
 		ID:            info.ID,
 		EntID:         info.EntID,

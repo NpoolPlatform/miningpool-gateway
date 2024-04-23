@@ -12,9 +12,6 @@ func (h *Handler) DeletePool(ctx context.Context) (*poolgwpb.Pool, error) {
 	if err != nil {
 		return nil, err
 	}
-	if info == nil {
-		return nil, nil
-	}
 
 	err = apppoolmwcli.DeletePool(ctx, *h.ID, *h.EntID)
 	if err != nil {

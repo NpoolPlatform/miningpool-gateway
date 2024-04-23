@@ -12,9 +12,6 @@ func (h *Handler) DeleteRootUser(ctx context.Context) (*rootusergwpb.RootUser, e
 	if err != nil {
 		return nil, err
 	}
-	if info == nil {
-		return nil, nil
-	}
 
 	err = rootusermwcli.DeleteRootUser(ctx, *h.ID, *h.EntID)
 	if err != nil {

@@ -31,6 +31,9 @@ func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) 
 }
 
 func mw2GW(info *orderusermw.OrderUser) *orderusergw.OrderUser {
+	if info == nil {
+		return nil
+	}
 	return &orderusergw.OrderUser{
 		ID:             info.ID,
 		EntID:          info.EntID,

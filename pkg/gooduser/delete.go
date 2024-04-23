@@ -12,9 +12,6 @@ func (h *Handler) DeleteGoodUser(ctx context.Context) (*goodusergwpb.GoodUser, e
 	if err != nil {
 		return nil, err
 	}
-	if info == nil {
-		return nil, nil
-	}
 
 	err = goodusermwcli.DeleteGoodUser(ctx, *h.ID, *h.EntID)
 	if err != nil {

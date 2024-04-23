@@ -34,6 +34,9 @@ func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) 
 }
 
 func mw2GW(info *poolmw.Pool, coins []*coinmw.Coin, rules []*fractionrulemw.FractionRule) *poolgw.Pool {
+	if info == nil {
+		return nil
+	}
 	_coins := []*poolgw.Coin{}
 	for _, v := range coins {
 		_coins = append(_coins, &poolgw.Coin{
