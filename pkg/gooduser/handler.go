@@ -37,6 +37,9 @@ func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) 
 }
 
 func mw2GW(info *goodusermw.GoodUser) *goodusergw.GoodUser {
+	if info == nil {
+		return nil
+	}
 	return &goodusergw.GoodUser{
 		ID:             info.ID,
 		EntID:          info.EntID,
