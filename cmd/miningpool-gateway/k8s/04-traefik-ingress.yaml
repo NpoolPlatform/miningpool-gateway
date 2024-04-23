@@ -36,7 +36,7 @@ spec:
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
-          - path: "/api/miningpool/v1/admin/get/n/apppools"
+          - path: "/api/miningpool/v1/admin/get/apppools"
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
