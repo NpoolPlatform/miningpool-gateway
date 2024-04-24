@@ -74,7 +74,7 @@ func (s *Server) GetPools(ctx context.Context, in *npool.GetPoolsRequest) (*npoo
 }
 
 //nolint:dupl
-func (s *Server) AdminGetNPools(ctx context.Context, in *npool.AdminGetNPoolsRequest) (*npool.AdminGetNPoolsResponse, error) {
+func (s *Server) AdminGetPools(ctx context.Context, in *npool.AdminGetNPoolsRequest) (*npool.AdminGetNPoolsResponse, error) {
 	handler, err := pool1.NewHandler(
 		ctx,
 		pool1.WithAppID(&in.TargetAppID, true),
