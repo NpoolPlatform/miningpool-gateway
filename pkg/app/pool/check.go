@@ -22,7 +22,7 @@ func (h *Handler) checkPool(ctx context.Context) error {
 		},
 		AppID: &v1.StringVal{
 			Op:    cruder.EQ,
-			Value: *h.TargetAppID,
+			Value: *h.AppID,
 		},
 	})
 	if err != nil {
