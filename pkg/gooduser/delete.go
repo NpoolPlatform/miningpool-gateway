@@ -8,6 +8,11 @@ import (
 )
 
 func (h *Handler) DeleteGoodUser(ctx context.Context) (*goodusergwpb.GoodUser, error) {
+	err := h.checkGoodUser(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	info, err := goodusermwcli.GetGoodUser(ctx, *h.EntID)
 	if err != nil {
 		return nil, err

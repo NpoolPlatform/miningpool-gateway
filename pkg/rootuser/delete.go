@@ -8,6 +8,11 @@ import (
 )
 
 func (h *Handler) DeleteRootUser(ctx context.Context) (*rootusergwpb.RootUser, error) {
+	err := h.checkRootUser(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	info, err := rootusermwcli.GetRootUser(ctx, *h.EntID)
 	if err != nil {
 		return nil, err

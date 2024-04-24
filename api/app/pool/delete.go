@@ -12,12 +12,12 @@ import (
 	npool "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/app/pool"
 )
 
-//nolint:dupl
 func (s *Server) AdminDeletePool(ctx context.Context, in *npool.AdminDeletePoolRequest) (*npool.AdminDeletePoolResponse, error) {
 	handler, err := pool1.NewHandler(
 		ctx,
 		pool1.WithID(&in.ID, true),
 		pool1.WithEntID(&in.EntID, true),
+		pool1.WithAppID(&in.TargetAppID, true),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(

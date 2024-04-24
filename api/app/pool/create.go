@@ -12,6 +12,7 @@ import (
 	npool "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/app/pool"
 )
 
+//nolint:dupl
 func (s *Server) AdminCreatePool(ctx context.Context, in *npool.AdminCreatePoolRequest) (*npool.AdminCreatePoolResponse, error) {
 	handler, err := pool1.NewHandler(
 		ctx,

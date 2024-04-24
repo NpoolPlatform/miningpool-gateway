@@ -58,6 +58,8 @@ github.com/NpoolPlatform/message v0.0.0-20240423095133-da2909c9e4a5 h1:rEEuACCqN
 github.com/NpoolPlatform/message v0.0.0-20240423095133-da2909c9e4a5/go.mod h1:PxJpF0vSSOke+NJskbRBRQ2fK2K3SRe8zaEja+GxSHk=
 github.com/NpoolPlatform/message v0.0.0-20240424021135-62c64a1da768 h1:xYcRGXTUx334mSrLBHR/oggErmS10SwubUk8f5fAyiU=
 github.com/NpoolPlatform/message v0.0.0-20240424021135-62c64a1da768/go.mod h1:PxJpF0vSSOke+NJskbRBRQ2fK2K3SRe8zaEja+GxSHk=
+github.com/NpoolPlatform/message v0.0.0-20240424025208-f9e12f33c7e1 h1:MhqTjq0QCeuIOLEmsuXOLcHW3VRMVRJL8+dWROTZQ9U=
+github.com/NpoolPlatform/message v0.0.0-20240424025208-f9e12f33c7e1/go.mod h1:PxJpF0vSSOke+NJskbRBRQ2fK2K3SRe8zaEja+GxSHk=
 github.com/NpoolPlatform/miningpool-middleware v0.0.0-20240423084725-46e76d1f04a5 h1:HboYVmFioElmKEadpT6CB73TlqguOC992XPHHq/ag90=
 github.com/NpoolPlatform/miningpool-middleware v0.0.0-20240423084725-46e76d1f04a5/go.mod h1:ihuTU2NIbbSY7TdEFMPosYmShbq4QniMVlu0VAunSsg=
 github.com/OneOfOne/xxhash v1.2.2 h1:KMrpdQIwFcEqXDklaen+P1axHaj9BSKzvpUUfnHldSE=

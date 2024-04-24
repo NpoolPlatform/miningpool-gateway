@@ -8,6 +8,11 @@ import (
 )
 
 func (h *Handler) DeletePool(ctx context.Context) (*poolgwpb.Pool, error) {
+	err := h.checkPool(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	info, err := fullPools(ctx, *h.EntID)
 	if err != nil {
 		return nil, err
