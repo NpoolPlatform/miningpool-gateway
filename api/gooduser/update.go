@@ -18,7 +18,6 @@ func (s *Server) AdminUpdateGoodUser(ctx context.Context, in *npool.AdminUpdateG
 		gooduser1.WithID(&in.ID, true),
 		gooduser1.WithEntID(&in.EntID, true),
 		gooduser1.WithHashRate(in.HashRate, false),
-		gooduser1.WithRevenueType(in.RevenueType, false),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(

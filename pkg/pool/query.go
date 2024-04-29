@@ -34,21 +34,25 @@ func (h *Handler) GetPools(ctx context.Context) ([]*poolgwpb.Pool, uint32, error
 
 func (h *Handler) fullPools(ctx context.Context, info *poolmwpb.Pool) (*poolgwpb.Pool, error) {
 	coins, _, err := coinmwcli.GetCoins(ctx, &coin.Conds{
-		MiningpoolType: &v1.Uint32Val{
+		PoolID: &v1.StringVal{
 			Op:    cruder.EQ,
-			Value: uint32(info.MiningpoolType),
+			Value: info.EntID,
 		},
 	}, 0, 0)
 	if err != nil {
 		return nil, err
 	}
 
-	rules, _, err := fractionrulemwcli.GetFractionRules(ctx, &fractionrule.Conds{MiningpoolType: &v1.Uint32Val{
-		Op:    cruder.EQ,
-		Value: uint32(info.MiningpoolType),
-	}}, 0, 0)
-	if err != nil {
-		return nil, err
+	rules := []*fractionrule.FractionRule{}
+	for _, info := range coins {
+		_rules, _, err := fractionrulemwcli.GetFractionRules(ctx, &fractionrule.Conds{CoinID: &v1.StringVal{
+			Op:    cruder.EQ,
+			Value: info.EntID,
+		}}, 0, 0)
+		if err != nil {
+			return nil, err
+		}
+		rules = append(rules, _rules...)
 	}
 
 	return mw2GW(info, coins, rules), nil

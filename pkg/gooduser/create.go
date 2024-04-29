@@ -16,11 +16,9 @@ func (h *Handler) CreateGoodUser(ctx context.Context) (*goodusergwpb.GoodUser, e
 	}
 
 	err := goodusermwcli.CreateGoodUser(ctx, &goodusermwpb.GoodUserReq{
-		EntID:       h.EntID,
-		RootUserID:  h.RootUserID,
-		CoinType:    h.CoinType,
-		HashRate:    h.HashRate,
-		RevenueType: h.RevenueType,
+		EntID:      h.EntID,
+		RootUserID: h.RootUserID,
+		HashRate:   h.HashRate,
 	})
 	if err != nil {
 		return nil, err

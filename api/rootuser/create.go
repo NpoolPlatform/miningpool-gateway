@@ -15,8 +15,8 @@ import (
 func (s *Server) AdminCreateRootUser(ctx context.Context, in *npool.AdminCreateRootUserRequest) (*npool.AdminCreateRootUserResponse, error) {
 	handler, err := rootuser1.NewHandler(
 		ctx,
+		rootuser1.WithPoolID(&in.PoolID, true),
 		rootuser1.WithName(&in.Name, true),
-		rootuser1.WithMiningpoolType(&in.MiningpoolType, true),
 		rootuser1.WithEmail(&in.Email, true),
 		rootuser1.WithAuthToken(&in.AuthToken, true),
 		rootuser1.WithRemark(in.Remark, false),

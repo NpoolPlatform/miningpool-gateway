@@ -37,19 +37,18 @@ func mw2GW(info *orderusermw.OrderUser) *orderusergw.OrderUser {
 	return &orderusergw.OrderUser{
 		ID:             info.ID,
 		EntID:          info.EntID,
-		Name:           info.Name,
-		RootUserID:     info.RootUserID,
-		GoodUserID:     info.GoodUserID,
 		AppID:          info.AppID,
 		UserID:         info.UserID,
+		RootUserID:     info.RootUserID,
+		GoodUserID:     info.GoodUserID,
+		Name:           info.Name,
+		Proportion:     info.Proportion,
+		RevenueAddress: info.RevenueAddress,
+		ReadPageLink:   info.ReadPageLink,
+		AutoPay:        info.AutoPay,
 		MiningpoolType: info.MiningpoolType,
 		CoinType:       info.CoinType,
-		Proportion:     info.Proportion,
-		ReadPageLink:   info.ReadPageLink,
-		RevenueAddress: info.RevenueAddress,
-		AutoPay:        info.AutoPay,
-		CreatedAt:      info.CreatedAt,
-		UpdatedAt:      info.UpdatedAt,
+		RevenueType:    info.RevenueType,
 	}
 }
 

@@ -43,22 +43,30 @@ func mw2GW(appinfo *apppoolmw.Pool, info *poolmw.Pool, coins []*coinmw.Coin, rul
 	_coins := []*poolgw.Coin{}
 	for _, v := range coins {
 		_coins = append(_coins, &poolgw.Coin{
-			CoinType:         v.CoinType,
-			RevenueTypes:     v.RevenueTypes,
-			FeeRate:          v.FeeRate,
-			FixedRevenueAble: v.FixedRevenueAble,
-			Threshold:        v.Threshold,
-			Remark:           v.Remark,
+			EntID:                  v.EntID,
+			PoolID:                 v.PoolID,
+			CoinType:               v.CoinType,
+			RevenueType:            v.RevenueType,
+			FeeRatio:               v.FeeRatio,
+			FixedRevenueAble:       v.FixedRevenueAble,
+			LeastTransferAmount:    v.LeastTransferAmount,
+			BenefitIntervalSeconds: v.BenefitIntervalSeconds,
+			Remark:                 v.Remark,
+			MiningpoolType:         v.MiningpoolType,
 		})
 	}
 
 	_rules := []*poolgw.FractionRule{}
 	for _, v := range rules {
 		_rules = append(_rules, &poolgw.FractionRule{
-			CoinType:         v.CoinType,
-			WithdrawInterval: v.WithdrawInterval,
-			MinAmount:        v.MinAmount,
-			WithdrawRate:     v.WithdrawRate,
+			EntID:             v.EntID,
+			CoinID:            v.CoinID,
+			WithdrawInterval:  v.WithdrawInterval,
+			MinAmount:         v.MinAmount,
+			WithdrawRate:      v.WithdrawRate,
+			MiningpoolTypeStr: v.MiningpoolTypeStr,
+			MiningpoolType:    v.MiningpoolType,
+			CoinType:          v.CoinType,
 		})
 	}
 
@@ -68,6 +76,7 @@ func mw2GW(appinfo *apppoolmw.Pool, info *poolmw.Pool, coins []*coinmw.Coin, rul
 		AppID:          appinfo.AppID,
 		PoolID:         info.EntID,
 		Name:           info.Name,
+		Logo:           info.Logo,
 		MiningpoolType: info.MiningpoolType,
 		Site:           info.Site,
 		Description:    info.Description,

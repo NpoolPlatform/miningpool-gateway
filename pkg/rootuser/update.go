@@ -15,14 +15,12 @@ func (h *Handler) UpdateRootUser(ctx context.Context) (*rootusergwpb.RootUser, e
 	}
 
 	err = rootusermwcli.UpdateRootUser(ctx, &rootusermwpb.RootUserReq{
-		ID:             h.ID,
-		EntID:          h.EntID,
-		Name:           h.Name,
-		MiningpoolType: h.MiningpoolType,
-		Email:          h.Email,
-		AuthToken:      h.AuthToken,
-		Authed:         h.Authed,
-		Remark:         h.Remark,
+		ID:        h.ID,
+		EntID:     h.EntID,
+		Name:      h.Name,
+		Email:     h.Email,
+		AuthToken: h.AuthToken,
+		Remark:    h.Remark,
 	})
 	if err != nil {
 		return nil, err

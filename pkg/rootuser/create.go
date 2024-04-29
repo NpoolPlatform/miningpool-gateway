@@ -16,12 +16,12 @@ func (h *Handler) CreateRootUser(ctx context.Context) (*rootusergwpb.RootUser, e
 	}
 
 	err := rootusermwcli.CreateRootUser(ctx, &rootusermwpb.RootUserReq{
-		EntID:          h.EntID,
-		Name:           h.Name,
-		MiningpoolType: h.MiningpoolType,
-		Email:          h.Email,
-		AuthToken:      h.AuthToken,
-		Remark:         h.Remark,
+		EntID:     h.EntID,
+		PoolID:    h.PoolID,
+		Name:      h.Name,
+		Email:     h.Email,
+		AuthToken: h.AuthToken,
+		Remark:    h.Remark,
 	})
 	if err != nil {
 		return nil, err

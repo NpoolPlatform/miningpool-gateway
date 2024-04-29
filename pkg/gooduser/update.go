@@ -15,11 +15,9 @@ func (h *Handler) UpdateGoodUser(ctx context.Context) (*goodusergwpb.GoodUser, e
 	}
 
 	err = goodusermwcli.UpdateGoodUser(ctx, &goodusermwpb.GoodUserReq{
-		ID:          h.ID,
-		EntID:       h.EntID,
-		RootUserID:  h.RootUserID,
-		HashRate:    h.HashRate,
-		RevenueType: h.RevenueType,
+		ID:       h.ID,
+		EntID:    h.EntID,
+		HashRate: h.HashRate,
 	})
 	if err != nil {
 		return nil, err

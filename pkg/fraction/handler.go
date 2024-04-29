@@ -17,9 +17,9 @@ import (
 type Handler struct {
 	ID            *uint32
 	EntID         *string
-	OrderUserID   *string
 	AppID         *string
 	UserID        *string
+	OrderUserID   *string
 	WithdrawState *basetypes.WithdrawState
 	WithdrawTime  *uint32
 	PayTime       *uint32
