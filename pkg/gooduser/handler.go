@@ -41,6 +41,7 @@ func mw2GW(info *goodusermw.GoodUser) *goodusergw.GoodUser {
 		EntID:          info.EntID,
 		Name:           info.Name,
 		RootUserID:     info.RootUserID,
+		CoinID:         info.CoinID,
 		MiningpoolType: info.MiningpoolType,
 		CoinType:       info.CoinType,
 		HashRate:       info.HashRate,
