@@ -1,3 +1,4 @@
+//nolint:dupl
 package gooduser
 
 import (
@@ -15,9 +16,8 @@ import (
 func (s *Server) AdminCreateGoodUser(ctx context.Context, in *npool.AdminCreateGoodUserRequest) (*npool.AdminCreateGoodUserResponse, error) {
 	handler, err := gooduser1.NewHandler(
 		ctx,
-		gooduser1.WithCoinID(&in.CoinID, true),
+		gooduser1.WithPoolCoinTypeID(&in.PoolCoinTypeID, true),
 		gooduser1.WithRootUserID(&in.RootUserID, true),
-		gooduser1.WithHashRate(&in.HashRate, true),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(

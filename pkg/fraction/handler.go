@@ -21,8 +21,8 @@ type Handler struct {
 	UserID        *string
 	OrderUserID   *string
 	WithdrawState *basetypes.WithdrawState
-	WithdrawTime  *uint32
-	PayTime       *uint32
+	WithdrawAt    *uint32
+	PromisePayAt  *uint32
 	Msg           *string
 	Offset        int32
 	Limit         int32
@@ -49,8 +49,8 @@ func mw2GW(info *fractionmw.Fraction) *fractiongw.Fraction {
 		UserID:        info.UserID,
 		OrderUserID:   info.OrderUserID,
 		WithdrawState: info.WithdrawState,
-		WithdrawTime:  info.WithdrawTime,
-		PayTime:       info.PayTime,
+		WithdrawAt:    info.WithdrawAt,
+		PromisePayAt:  info.PromisePayAt,
 		Msg:           info.Msg,
 		CreatedAt:     info.CreatedAt,
 		UpdatedAt:     info.UpdatedAt,

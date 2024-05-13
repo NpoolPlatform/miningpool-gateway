@@ -45,7 +45,7 @@ func (h *Handler) fullPools(ctx context.Context, info *poolmwpb.Pool) (*poolgwpb
 
 	rules := []*fractionrule.FractionRule{}
 	for _, info := range coins {
-		_rules, _, err := fractionrulemwcli.GetFractionRules(ctx, &fractionrule.Conds{CoinID: &v1.StringVal{
+		_rules, _, err := fractionrulemwcli.GetFractionRules(ctx, &fractionrule.Conds{PoolCoinTypeID: &v1.StringVal{
 			Op:    cruder.EQ,
 			Value: info.EntID,
 		}}, 0, 0)

@@ -13,13 +13,12 @@ import (
 )
 
 type Handler struct {
-	ID         *uint32
-	EntID      *string
-	CoinID     *string
-	RootUserID *string
-	HashRate   *float32
-	Offset     int32
-	Limit      int32
+	ID             *uint32
+	EntID          *string
+	PoolCoinTypeID *string
+	RootUserID     *string
+	Offset         int32
+	Limit          int32
 }
 
 func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) error) (*Handler, error) {
@@ -41,10 +40,9 @@ func mw2GW(info *goodusermw.GoodUser) *goodusergw.GoodUser {
 		EntID:          info.EntID,
 		Name:           info.Name,
 		RootUserID:     info.RootUserID,
-		CoinID:         info.CoinID,
+		PoolCoinTypeID: info.PoolCoinTypeID,
 		MiningpoolType: info.MiningpoolType,
 		CoinType:       info.CoinType,
-		HashRate:       info.HashRate,
 		ReadPageLink:   info.ReadPageLink,
 		RevenueType:    info.RevenueType,
 		CreatedAt:      info.CreatedAt,
@@ -86,7 +84,7 @@ func WithEntID(id *string, must bool) func(context.Context, *Handler) error {
 	}
 }
 
-func WithCoinID(id *string, must bool) func(context.Context, *Handler) error {
+func WithPoolCoinTypeID(id *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if id == nil {
 			if must {
@@ -101,7 +99,7 @@ func WithCoinID(id *string, must bool) func(context.Context, *Handler) error {
 		if !exist {
 			return fmt.Errorf("invalid coinid")
 		}
-		h.CoinID = id
+		h.PoolCoinTypeID = id
 		return nil
 	}
 }
@@ -122,19 +120,6 @@ func WithRootUserID(id *string, must bool) func(context.Context, *Handler) error
 			return fmt.Errorf("invalid rootuserid")
 		}
 		h.RootUserID = id
-		return nil
-	}
-}
-
-func WithHashRate(hashrate *float32, must bool) func(context.Context, *Handler) error {
-	return func(ctx context.Context, h *Handler) error {
-		if hashrate == nil {
-			if must {
-				return fmt.Errorf("invalid hashrate")
-			}
-			return nil
-		}
-		h.HashRate = hashrate
 		return nil
 	}
 }
