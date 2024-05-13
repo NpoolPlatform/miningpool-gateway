@@ -44,6 +44,38 @@ spec:
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
+          - path: "/v1/admin/create/miningpoolcoin"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
+          - path: "/v1/admin/update/miningpoolcoin"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
+          - path: "/v1/admin/get/miningpoolcoins"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
+          - path: "/v1/admin/delete/miningpoolcoin"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
+          - path: "/v1/admin/create/miningpoolfractionrule"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
+          - path: "/v1/admin/update/miningpoolfractionrule"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
+          - path: "/v1/admin/get/miningpoolfractionrules"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
+          - path: "/v1/admin/delete/miningpoolfractionrule"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
           - path: "/api/miningpool/v1/admin/create/goodminingpooluser"
             backend:
               serviceName: miningpool-gateway
@@ -60,7 +92,19 @@ spec:
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
-          - path: "/api/miningpool/v1/admin/get/miningpools"
+          - path: "/v1/admin/create/miningpool"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
+          - path: "/v1/admin/update/miningpool"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
+          - path: "/v1/admin/get/miningpools"
+            backend:
+              serviceName: miningpool-gateway
+              servicePort: 50860
+          - path: "/v1/admin/delete/miningpool"
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
