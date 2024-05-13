@@ -5,11 +5,13 @@ import (
 
 	v1 "github.com/NpoolPlatform/message/npool/miningpool/gw/v1"
 	apppool "github.com/NpoolPlatform/miningpool-gateway/api/app/pool"
+	"github.com/NpoolPlatform/miningpool-gateway/api/coin"
 	"github.com/NpoolPlatform/miningpool-gateway/api/fraction"
 	"github.com/NpoolPlatform/miningpool-gateway/api/gooduser"
 	"github.com/NpoolPlatform/miningpool-gateway/api/orderuser"
 	"github.com/NpoolPlatform/miningpool-gateway/api/pool"
 	"github.com/NpoolPlatform/miningpool-gateway/api/rootuser"
+	"github.com/NpoolPlatform/miningpool-middleware/api/fractionrule"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 )
@@ -26,6 +28,8 @@ func Register(server grpc.ServiceRegistrar) {
 	orderuser.Register(server)
 	apppool.Register(server)
 	pool.Register(server)
+	coin.Register(server)
+	fractionrule.Register(server)
 }
 
 func RegisterGateway(mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error {
@@ -48,6 +52,12 @@ func RegisterGateway(mux *runtime.ServeMux, endpoint string, opts []grpc.DialOpt
 		return err
 	}
 	if err := pool.RegisterGateway(mux, endpoint, opts); err != nil {
+		return err
+	}
+	if err := coin.RegisterGateway(mux, endpoint, opts); err != nil {
+		return err
+	}
+	if err := fractionrule.RegisterGateway(mux, endpoint, opts); err != nil {
 		return err
 	}
 	return nil

@@ -3,6 +3,7 @@ package pool
 import (
 	"context"
 	"fmt"
+	"regexp"
 
 	basetypes "github.com/NpoolPlatform/message/npool/basetypes/miningpool/v1"
 	poolgw "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/pool"
@@ -18,6 +19,7 @@ type Handler struct {
 	MiningpoolType *basetypes.MiningpoolType
 	Name           *string
 	Site           *string
+	Logo           *string
 	Description    *string
 	Offset         int32
 	Limit          int32
@@ -50,6 +52,8 @@ func mw2GW(info *poolmw.Pool, coins []*coinmw.Coin, rules []*fractionrulemw.Frac
 			LeastTransferAmount:    v.LeastTransferAmount,
 			BenefitIntervalSeconds: v.BenefitIntervalSeconds,
 			Remark:                 v.Remark,
+			CreatedAt:              v.CreatedAt,
+			UpdatedAt:              v.UpdatedAt,
 		})
 	}
 
@@ -62,6 +66,8 @@ func mw2GW(info *poolmw.Pool, coins []*coinmw.Coin, rules []*fractionrulemw.Frac
 			MinAmount:         v.MinAmount,
 			WithdrawRate:      v.WithdrawRate,
 			MiningpoolTypeStr: v.MiningpoolTypeStr,
+			CreatedAt:         v.CreatedAt,
+			UpdatedAt:         v.UpdatedAt,
 		})
 	}
 
@@ -75,6 +81,8 @@ func mw2GW(info *poolmw.Pool, coins []*coinmw.Coin, rules []*fractionrulemw.Frac
 		Description:    info.Description,
 		Coins:          _coins,
 		FractionRules:  _rules,
+		CreatedAt:      info.CreatedAt,
+		UpdatedAt:      info.UpdatedAt,
 	}
 }
 
@@ -100,6 +108,79 @@ func WithEntID(id *string, must bool) func(context.Context, *Handler) error {
 			return nil
 		}
 		h.EntID = id
+		return nil
+	}
+}
+
+func WithMiningpoolType(miningpooltype *basetypes.MiningpoolType, must bool) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if miningpooltype == nil {
+			if must {
+				return fmt.Errorf("invalid miningpooltype")
+			}
+			return nil
+		}
+		if *miningpooltype == basetypes.MiningpoolType_DefaultMiningpoolType {
+			return fmt.Errorf("invalid miningpooltype,not allow be default type")
+		}
+		h.MiningpoolType = miningpooltype
+
+		return nil
+	}
+}
+
+func WithName(name *string, must bool) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if name == nil {
+			if must {
+				return fmt.Errorf("invalid name")
+			}
+			return nil
+		}
+		re := regexp.MustCompile("^[a-zA-Z0-9\u3040-\u31ff][[a-zA-Z0-9_\\-\\.\u3040-\u31ff]{3,32}$") //nolint
+		if !re.MatchString(*name) {
+			return fmt.Errorf("invalid name")
+		}
+		h.Name = name
+		return nil
+	}
+}
+
+func WithSite(site *string, must bool) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if site == nil {
+			if must {
+				return fmt.Errorf("invalid site")
+			}
+			return nil
+		}
+		h.Site = site
+		return nil
+	}
+}
+
+func WithLogo(logo *string, must bool) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if logo == nil {
+			if must {
+				return fmt.Errorf("invalid logo")
+			}
+			return nil
+		}
+		h.Logo = logo
+		return nil
+	}
+}
+
+func WithDescription(description *string, must bool) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if description == nil {
+			if must {
+				return fmt.Errorf("invalid description")
+			}
+			return nil
+		}
+		h.Description = description
 		return nil
 	}
 }
