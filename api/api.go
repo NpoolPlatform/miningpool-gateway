@@ -7,11 +7,11 @@ import (
 	apppool "github.com/NpoolPlatform/miningpool-gateway/api/app/pool"
 	"github.com/NpoolPlatform/miningpool-gateway/api/coin"
 	"github.com/NpoolPlatform/miningpool-gateway/api/fraction"
+	"github.com/NpoolPlatform/miningpool-gateway/api/fractionrule"
 	"github.com/NpoolPlatform/miningpool-gateway/api/gooduser"
 	"github.com/NpoolPlatform/miningpool-gateway/api/orderuser"
 	"github.com/NpoolPlatform/miningpool-gateway/api/pool"
 	"github.com/NpoolPlatform/miningpool-gateway/api/rootuser"
-	"github.com/NpoolPlatform/miningpool-middleware/api/fractionrule"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 )
