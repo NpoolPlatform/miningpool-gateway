@@ -17,6 +17,7 @@ func (h *Handler) CreateCoin(ctx context.Context) (*coingwpb.Coin, error) {
 
 	err := coinmwcli.CreateCoin(ctx, &coinmwpb.CoinReq{
 		EntID:                  h.EntID,
+		PoolID:                 h.PoolID,
 		CoinTypeID:             h.CoinTypeID,
 		CoinType:               h.CoinType,
 		RevenueType:            h.RevenueType,

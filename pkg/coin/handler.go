@@ -141,7 +141,7 @@ func WithPoolID(poolid *string, must bool) func(context.Context, *Handler) error
 	return func(ctx context.Context, h *Handler) error {
 		if poolid == nil {
 			if must {
-				return fmt.Errorf("invalid poolid 1:%v", poolid)
+				return fmt.Errorf("invalid poolid")
 			}
 			return nil
 		}
@@ -150,7 +150,7 @@ func WithPoolID(poolid *string, must bool) func(context.Context, *Handler) error
 			return err
 		}
 		if !exist {
-			return fmt.Errorf("invalid poolid 2:%v", poolid)
+			return fmt.Errorf("invalid poolid")
 		}
 		h.PoolID = poolid
 		return nil
