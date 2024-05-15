@@ -60,14 +60,13 @@ func mw2GW(info *poolmw.Pool, coins []*coinmw.Coin, rules []*fractionrulemw.Frac
 	_rules := []*poolgw.FractionRule{}
 	for _, v := range rules {
 		_rules = append(_rules, &poolgw.FractionRule{
-			EntID:             v.EntID,
-			PoolCoinTypeID:    v.PoolCoinTypeID,
-			WithdrawInterval:  v.WithdrawInterval,
-			MinAmount:         v.MinAmount,
-			WithdrawRate:      v.WithdrawRate,
-			MiningpoolTypeStr: v.MiningpoolTypeStr,
-			CreatedAt:         v.CreatedAt,
-			UpdatedAt:         v.UpdatedAt,
+			EntID:            v.EntID,
+			PoolCoinTypeID:   v.PoolCoinTypeID,
+			WithdrawInterval: v.WithdrawInterval,
+			MinAmount:        v.MinAmount,
+			WithdrawRate:     v.WithdrawRate,
+			CreatedAt:        v.CreatedAt,
+			UpdatedAt:        v.UpdatedAt,
 		})
 	}
 
