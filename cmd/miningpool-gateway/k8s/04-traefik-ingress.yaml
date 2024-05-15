@@ -80,10 +80,6 @@ spec:
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
-          - path: "/api/miningpool/v1/admin/get/goodminingpooluser"
-            backend:
-              serviceName: miningpool-gateway
-              servicePort: 50860
           - path: "/api/miningpool/v1/admin/get/goodminingpoolusers"
             backend:
               serviceName: miningpool-gateway
@@ -109,10 +105,6 @@ spec:
               serviceName: miningpool-gateway
               servicePort: 50860
           - path: "/api/miningpool/v1/admin/create/rootminingpooluser"
-            backend:
-              serviceName: miningpool-gateway
-              servicePort: 50860
-          - path: "/api/miningpool/v1/admin/get/rootminingpooluser"
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
