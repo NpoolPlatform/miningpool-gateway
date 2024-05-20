@@ -28,7 +28,7 @@ func (h *Handler) GetFractionRule(ctx context.Context) (*fractionrulegwpb.Fracti
 		return nil, err
 	}
 	if info == nil {
-		return nil, fmt.Errorf("invalid pool")
+		return nil, fmt.Errorf("invalid fractionrule")
 	}
 	return mw2GW(info), nil
 }

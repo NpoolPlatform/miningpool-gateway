@@ -40,6 +40,7 @@ func mw2GW(info *fractionrulemw.FractionRule) *fractionrulegw.FractionRule {
 	return &fractionrulegw.FractionRule{
 		ID:               info.ID,
 		EntID:            info.EntID,
+		PoolID:           info.PoolID,
 		PoolCoinTypeID:   info.PoolCoinTypeID,
 		WithdrawInterval: info.WithdrawInterval,
 		MinAmount:        info.MinAmount,

@@ -28,7 +28,7 @@ func (h *Handler) GetCoin(ctx context.Context) (*coingwpb.Coin, error) {
 		return nil, err
 	}
 	if info == nil {
-		return nil, fmt.Errorf("invalid pool")
+		return nil, fmt.Errorf("invalid coin")
 	}
 	return mw2GW(info), nil
 }

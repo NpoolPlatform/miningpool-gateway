@@ -8,6 +8,7 @@ import (
 	basetypes "github.com/NpoolPlatform/message/npool/basetypes/v1"
 	coingw "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/coin"
 	coinmw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/coin"
+	"github.com/NpoolPlatform/miningpool-gateway/pkg/common"
 	constant "github.com/NpoolPlatform/miningpool-gateway/pkg/const"
 	poolmwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/pool"
 
@@ -97,6 +98,7 @@ func WithCoinType(cointype *basetypes.CoinType, must bool) func(context.Context,
 			}
 			return nil
 		}
+
 		if *cointype == basetypes.CoinType_DefaultCoinType {
 			return fmt.Errorf("invalid cointype,not allow be default type")
 		}
@@ -133,6 +135,13 @@ func WithCoinTypeID(cointypeid *string, must bool) func(context.Context, *Handle
 		if err != nil {
 			return err
 		}
+
+		ccHandler := common.CoinCheckHandler{CoinTypeID: cointypeid}
+		err = ccHandler.CheckCoin(ctx)
+		if err != nil {
+			return err
+		}
+
 		h.CoinTypeID = cointypeid
 		return nil
 	}
