@@ -4,28 +4,20 @@ import (
 	"context"
 	"fmt"
 
-	basetypes "github.com/NpoolPlatform/message/npool/basetypes/miningpool/v1"
+	appmwcli "github.com/NpoolPlatform/appuser-middleware/pkg/client/app"
+
 	orderusergw "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/orderuser"
 	orderusermw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/orderuser"
 	constant "github.com/NpoolPlatform/miningpool-gateway/pkg/const"
 )
 
 type Handler struct {
-	ID             *uint32
-	EntID          *string
-	Name           *string
-	RootUserID     *string
-	GoodUserID     *string
-	AppID          *string
-	UserID         *string
-	MiningpoolType *basetypes.MiningpoolType
-	CoinType       *basetypes.CoinType
-	Proportion     *float32
-	RevenueAddress *string
-	ReadPageLink   *string
-	AutoPay        *bool
-	Offset         int32
-	Limit          int32
+	ID     *uint32
+	EntID  *string
+	AppID  *string
+	UserID *string
+	Offset int32
+	Limit  int32
 }
 
 func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) error) (*Handler, error) {
@@ -39,22 +31,24 @@ func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) 
 }
 
 func mw2GW(info *orderusermw.OrderUser) *orderusergw.OrderUser {
+	if info == nil {
+		return nil
+	}
 	return &orderusergw.OrderUser{
 		ID:             info.ID,
 		EntID:          info.EntID,
-		Name:           info.Name,
-		RootUserID:     info.RootUserID,
-		GoodUserID:     info.GoodUserID,
 		AppID:          info.AppID,
 		UserID:         info.UserID,
+		RootUserID:     info.RootUserID,
+		GoodUserID:     info.GoodUserID,
+		Name:           info.Name,
+		Proportion:     info.Proportion,
+		RevenueAddress: info.RevenueAddress,
+		ReadPageLink:   info.ReadPageLink,
+		AutoPay:        info.AutoPay,
 		MiningpoolType: info.MiningpoolType,
 		CoinType:       info.CoinType,
-		Proportion:     info.Proportion,
-		ReadPageLink:   info.ReadPageLink,
-		RevenueAddress: info.RevenueAddress,
-		AutoPay:        info.AutoPay,
-		CreatedAt:      info.CreatedAt,
-		UpdatedAt:      info.UpdatedAt,
+		RevenueType:    info.RevenueType,
 	}
 }
 
@@ -92,6 +86,13 @@ func WithAppID(id *string, must bool) func(context.Context, *Handler) error {
 			}
 			return nil
 		}
+		exist, err := appmwcli.ExistApp(ctx, *id)
+		if err != nil {
+			return err
+		}
+		if !exist {
+			return fmt.Errorf("invalid appid")
+		}
 		h.AppID = id
 		return nil
 	}
@@ -106,32 +107,6 @@ func WithUserID(id *string, must bool) func(context.Context, *Handler) error {
 			return nil
 		}
 		h.UserID = id
-		return nil
-	}
-}
-
-func WithRevenueAddress(addr *string, must bool) func(context.Context, *Handler) error {
-	return func(ctx context.Context, h *Handler) error {
-		if addr == nil {
-			if must {
-				return fmt.Errorf("invalid revenueaddress")
-			}
-			return nil
-		}
-		h.RevenueAddress = addr
-		return nil
-	}
-}
-
-func WithAutoPay(autopay *bool, must bool) func(context.Context, *Handler) error {
-	return func(ctx context.Context, h *Handler) error {
-		if autopay == nil {
-			if must {
-				return fmt.Errorf("invalid autopay")
-			}
-			return nil
-		}
-		h.AutoPay = autopay
 		return nil
 	}
 }

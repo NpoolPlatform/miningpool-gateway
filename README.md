@@ -67,4 +67,4 @@
 * 对于通过条件查询的前端API或App管理员API，其request中应总是包含AppID字段，实现时应该总是将该AppID字段添加到查询条件
 * 对于批量创建的前端或App管理员API，其request中应总是包含AppID字段，实现时应该总是将该AppID字段覆盖request.Info或request.Infos中的AppID
 * 更新API的实现不应更新AppID域
-* 对于通过条件查询或创建其他App数据的大后台管理员API，其request中应总是包含TargetAppID，实现时应该总是将TargetAppID字段覆盖request.Info或request.Infos中的AppID
+* 对于通过条件查询或创建其他App数据的大后台管理员API，其request中应总是包含TargetAppID，实现时应该总是将TargetAppID字段覆盖request.Info或request.Infos中的AppID 

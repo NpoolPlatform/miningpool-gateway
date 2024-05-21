@@ -7,6 +7,7 @@ import (
 	servicename "github.com/NpoolPlatform/miningpool-gateway/pkg/servicename"
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/app"
+	"github.com/NpoolPlatform/go-service-framework/pkg/config"
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 
 	mysqlconst "github.com/NpoolPlatform/go-service-framework/pkg/mysql/const"
@@ -31,9 +32,10 @@ func main() {
 		"./",
 		nil,
 		commands,
-		mysqlconst.MysqlServiceName,
-		rabbitmqconst.RabbitMQServiceName,
-		redisconst.RedisServiceName,
+		// dep services
+		config.ServiceNameToNamespace(mysqlconst.MysqlServiceName),
+		config.ServiceNameToNamespace(redisconst.RedisServiceName),
+		config.ServiceNameToNamespace(rabbitmqconst.RabbitMQServiceName),
 	)
 	if err != nil {
 		logger.Sugar().Errorf("fail to create %v: %v", servicename.ServiceName, err)

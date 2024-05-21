@@ -4,23 +4,22 @@ import (
 	"context"
 	"fmt"
 
-	basetypes "github.com/NpoolPlatform/message/npool/basetypes/miningpool/v1"
 	rootusergw "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/rootuser"
 	rootusermw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/rootuser"
 	constant "github.com/NpoolPlatform/miningpool-gateway/pkg/const"
 )
 
 type Handler struct {
-	ID             *uint32
-	EntID          *string
-	Name           *string
-	MiningpoolType *basetypes.MiningpoolType
-	Email          *string
-	AuthToken      *string
-	Authed         *bool
-	Remark         *string
-	Offset         int32
-	Limit          int32
+	ID        *uint32
+	EntID     *string
+	PoolID    *string
+	Name      *string
+	Email     *string
+	AuthToken *string
+	Authed    *bool
+	Remark    *string
+	Offset    int32
+	Limit     int32
 }
 
 func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) error) (*Handler, error) {
@@ -34,15 +33,19 @@ func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) 
 }
 
 func mw2GW(info *rootusermw.RootUser) *rootusergw.RootUser {
+	if info == nil {
+		return nil
+	}
 	return &rootusergw.RootUser{
 		ID:             info.ID,
 		EntID:          info.EntID,
+		PoolID:         info.PoolID,
 		Name:           info.Name,
-		MiningpoolType: info.MiningpoolType,
 		Email:          info.Email,
 		AuthToken:      info.AuthToken,
 		Authed:         info.Authed,
 		Remark:         info.Remark,
+		MiningpoolType: info.MiningpoolType,
 		CreatedAt:      info.CreatedAt,
 		UpdatedAt:      info.UpdatedAt,
 	}
@@ -82,6 +85,19 @@ func WithEntID(id *string, must bool) func(context.Context, *Handler) error {
 	}
 }
 
+func WithPoolID(id *string, must bool) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if id == nil {
+			if must {
+				return fmt.Errorf("invalid poolid")
+			}
+			return nil
+		}
+		h.PoolID = id
+		return nil
+	}
+}
+
 func WithName(name *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if name == nil {
@@ -91,22 +107,6 @@ func WithName(name *string, must bool) func(context.Context, *Handler) error {
 			return nil
 		}
 		h.Name = name
-		return nil
-	}
-}
-
-func WithMiningpoolType(miningpooltype *basetypes.MiningpoolType, must bool) func(context.Context, *Handler) error {
-	return func(ctx context.Context, h *Handler) error {
-		if miningpooltype == nil {
-			if must {
-				return fmt.Errorf("invalid miningpooltype")
-			}
-			return nil
-		}
-		if miningpooltype == basetypes.MiningpoolType_DefaultMiningpoolType.Enum() {
-			return fmt.Errorf("invalid miningpooltype,not allow be default type")
-		}
-		h.MiningpoolType = miningpooltype
 		return nil
 	}
 }
@@ -133,19 +133,6 @@ func WithAuthToken(authtoken *string, must bool) func(context.Context, *Handler)
 			return nil
 		}
 		h.AuthToken = authtoken
-		return nil
-	}
-}
-
-func WithAuthed(authed *bool, must bool) func(context.Context, *Handler) error {
-	return func(ctx context.Context, h *Handler) error {
-		if authed == nil {
-			if must {
-				return fmt.Errorf("invalid authed")
-			}
-			return nil
-		}
-		h.Authed = authed
 		return nil
 	}
 }

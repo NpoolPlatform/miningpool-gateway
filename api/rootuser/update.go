@@ -12,7 +12,7 @@ import (
 	npool "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/rootuser"
 )
 
-func (s *Server) UpdateRootUser(ctx context.Context, in *npool.UpdateRootUserRequest) (*npool.UpdateRootUserResponse, error) {
+func (s *Server) AdminUpdateRootUser(ctx context.Context, in *npool.AdminUpdateRootUserRequest) (*npool.AdminUpdateRootUserResponse, error) {
 	handler, err := rootuser1.NewHandler(
 		ctx,
 		rootuser1.WithID(&in.ID, true),
@@ -28,7 +28,7 @@ func (s *Server) UpdateRootUser(ctx context.Context, in *npool.UpdateRootUserReq
 			"In", in,
 			"Error", err,
 		)
-		return &npool.UpdateRootUserResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminUpdateRootUserResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
 	info, err := handler.UpdateRootUser(ctx)
@@ -38,10 +38,10 @@ func (s *Server) UpdateRootUser(ctx context.Context, in *npool.UpdateRootUserReq
 			"In", in,
 			"Error", err,
 		)
-		return &npool.UpdateRootUserResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminUpdateRootUserResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
-	return &npool.UpdateRootUserResponse{
+	return &npool.AdminUpdateRootUserResponse{
 		Info: info,
 	}, nil
 }

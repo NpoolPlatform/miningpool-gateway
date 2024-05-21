@@ -1,3 +1,4 @@
+//nolint:dupl
 package gooduser
 
 import (
@@ -12,13 +13,11 @@ import (
 	npool "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/gooduser"
 )
 
-func (s *Server) CreateGoodUser(ctx context.Context, in *npool.CreateGoodUserRequest) (*npool.CreateGoodUserResponse, error) {
+func (s *Server) AdminCreateGoodUser(ctx context.Context, in *npool.AdminCreateGoodUserRequest) (*npool.AdminCreateGoodUserResponse, error) {
 	handler, err := gooduser1.NewHandler(
 		ctx,
+		gooduser1.WithPoolCoinTypeID(&in.PoolCoinTypeID, true),
 		gooduser1.WithRootUserID(&in.RootUserID, true),
-		gooduser1.WithCoinType(&in.CoinType, true),
-		gooduser1.WithHashRate(&in.HashRate, true),
-		gooduser1.WithRevenueType(&in.RevenueType, true),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(
@@ -26,7 +25,7 @@ func (s *Server) CreateGoodUser(ctx context.Context, in *npool.CreateGoodUserReq
 			"In", in,
 			"Error", err,
 		)
-		return &npool.CreateGoodUserResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminCreateGoodUserResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
 	info, err := handler.CreateGoodUser(ctx)
@@ -36,10 +35,10 @@ func (s *Server) CreateGoodUser(ctx context.Context, in *npool.CreateGoodUserReq
 			"In", in,
 			"Error", err,
 		)
-		return &npool.CreateGoodUserResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminCreateGoodUserResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
-	return &npool.CreateGoodUserResponse{
+	return &npool.AdminCreateGoodUserResponse{
 		Info: info,
 	}, nil
 }

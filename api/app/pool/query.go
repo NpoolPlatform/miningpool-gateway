@@ -74,7 +74,7 @@ func (s *Server) GetPools(ctx context.Context, in *npool.GetPoolsRequest) (*npoo
 }
 
 //nolint:dupl
-func (s *Server) GetNPools(ctx context.Context, in *npool.GetNPoolsRequest) (*npool.GetNPoolsResponse, error) {
+func (s *Server) AdminGetPools(ctx context.Context, in *npool.AdminGetPoolsRequest) (*npool.AdminGetPoolsResponse, error) {
 	handler, err := pool1.NewHandler(
 		ctx,
 		pool1.WithAppID(&in.TargetAppID, true),
@@ -87,7 +87,7 @@ func (s *Server) GetNPools(ctx context.Context, in *npool.GetNPoolsRequest) (*np
 			"In", in,
 			"Error", err,
 		)
-		return &npool.GetNPoolsResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminGetPoolsResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
 	infos, total, err := handler.GetPools(ctx)
@@ -97,10 +97,10 @@ func (s *Server) GetNPools(ctx context.Context, in *npool.GetNPoolsRequest) (*np
 			"In", in,
 			"Error", err,
 		)
-		return &npool.GetNPoolsResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminGetPoolsResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
-	return &npool.GetNPoolsResponse{
+	return &npool.AdminGetPoolsResponse{
 		Infos: infos,
 		Total: total,
 	}, nil

@@ -11,22 +11,21 @@ import (
 )
 
 func (h *Handler) CreateRootUser(ctx context.Context) (*rootusergwpb.RootUser, error) {
-	id := uuid.NewString()
 	if h.EntID == nil {
-		h.EntID = &id
+		h.EntID = func() *string { s := uuid.NewString(); return &s }()
 	}
 
-	info, err := rootusermwcli.CreateRootUser(ctx, &rootusermwpb.RootUserReq{
-		EntID:          h.EntID,
-		Name:           h.Name,
-		MiningpoolType: h.MiningpoolType,
-		Email:          h.Email,
-		AuthToken:      h.AuthToken,
-		Remark:         h.Remark,
+	err := rootusermwcli.CreateRootUser(ctx, &rootusermwpb.RootUserReq{
+		EntID:     h.EntID,
+		PoolID:    h.PoolID,
+		Name:      h.Name,
+		Email:     h.Email,
+		AuthToken: h.AuthToken,
+		Remark:    h.Remark,
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	return mw2GW(info), nil
+	return h.GetRootUser(ctx)
 }

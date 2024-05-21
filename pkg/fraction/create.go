@@ -6,10 +6,12 @@ import (
 
 	appmwcli "github.com/NpoolPlatform/appuser-middleware/pkg/client/app"
 	usermwcli "github.com/NpoolPlatform/appuser-middleware/pkg/client/user"
+	"github.com/google/uuid"
 
 	fractiongwpb "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/fraction"
 	"github.com/NpoolPlatform/message/npool/miningpool/mw/v1/fraction"
 	fractionmwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/fraction"
+	orderusermwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/orderuser"
 )
 
 func (h *Handler) getUser(ctx context.Context) error {
@@ -43,7 +45,21 @@ func (h *Handler) CreateFraction(ctx context.Context) (*fractiongwpb.Fraction, e
 		return nil, err
 	}
 
-	info, err := fractionmwcli.CreateFraction(ctx, &fraction.FractionReq{
+	orderUser, err := orderusermwcli.GetOrderUser(ctx, *h.OrderUserID)
+	if err != nil {
+		return nil, err
+	}
+
+	if orderUser.AppID != *h.AppID || orderUser.UserID != *h.UserID {
+		return nil, fmt.Errorf("permission denine")
+	}
+
+	if h.EntID == nil {
+		h.EntID = func() *string { s := uuid.NewString(); return &s }()
+	}
+
+	err = fractionmwcli.CreateFraction(ctx, &fraction.FractionReq{
+		EntID:       h.EntID,
 		AppID:       h.AppID,
 		UserID:      h.UserID,
 		OrderUserID: h.OrderUserID,
@@ -51,11 +67,6 @@ func (h *Handler) CreateFraction(ctx context.Context) (*fractiongwpb.Fraction, e
 	if err != nil {
 		return nil, err
 	}
-	if info == nil {
-		return nil, fmt.Errorf("invalid fraction")
-	}
-	if info.UserID != *h.UserID || info.AppID != *h.AppID {
-		return nil, fmt.Errorf("permission denied")
-	}
-	return mw2GW(info), nil
+
+	return h.GetFraction(ctx)
 }

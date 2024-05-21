@@ -12,11 +12,11 @@ import (
 	npool "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/rootuser"
 )
 
-func (s *Server) CreateRootUser(ctx context.Context, in *npool.CreateRootUserRequest) (*npool.CreateRootUserResponse, error) {
+func (s *Server) AdminCreateRootUser(ctx context.Context, in *npool.AdminCreateRootUserRequest) (*npool.AdminCreateRootUserResponse, error) {
 	handler, err := rootuser1.NewHandler(
 		ctx,
+		rootuser1.WithPoolID(&in.PoolID, true),
 		rootuser1.WithName(&in.Name, true),
-		rootuser1.WithMiningpoolType(&in.MiningpoolType, true),
 		rootuser1.WithEmail(&in.Email, true),
 		rootuser1.WithAuthToken(&in.AuthToken, true),
 		rootuser1.WithRemark(in.Remark, false),
@@ -27,7 +27,7 @@ func (s *Server) CreateRootUser(ctx context.Context, in *npool.CreateRootUserReq
 			"In", in,
 			"Error", err,
 		)
-		return &npool.CreateRootUserResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminCreateRootUserResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
 	info, err := handler.CreateRootUser(ctx)
@@ -37,10 +37,10 @@ func (s *Server) CreateRootUser(ctx context.Context, in *npool.CreateRootUserReq
 			"In", in,
 			"Error", err,
 		)
-		return &npool.CreateRootUserResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminCreateRootUserResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
-	return &npool.CreateRootUserResponse{
+	return &npool.AdminCreateRootUserResponse{
 		Info: info,
 	}, nil
 }

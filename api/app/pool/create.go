@@ -13,7 +13,7 @@ import (
 )
 
 //nolint:dupl
-func (s *Server) CreatePool(ctx context.Context, in *npool.CreatePoolRequest) (*npool.CreatePoolResponse, error) {
+func (s *Server) AdminCreatePool(ctx context.Context, in *npool.AdminCreatePoolRequest) (*npool.AdminCreatePoolResponse, error) {
 	handler, err := pool1.NewHandler(
 		ctx,
 		pool1.WithPoolID(&in.PoolID, true),
@@ -25,7 +25,7 @@ func (s *Server) CreatePool(ctx context.Context, in *npool.CreatePoolRequest) (*
 			"In", in,
 			"Error", err,
 		)
-		return &npool.CreatePoolResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminCreatePoolResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
 	info, err := handler.CreatePool(ctx)
@@ -35,10 +35,10 @@ func (s *Server) CreatePool(ctx context.Context, in *npool.CreatePoolRequest) (*
 			"In", in,
 			"Error", err,
 		)
-		return &npool.CreatePoolResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminCreatePoolResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
-	return &npool.CreatePoolResponse{
+	return &npool.AdminCreatePoolResponse{
 		Info: info,
 	}, nil
 }

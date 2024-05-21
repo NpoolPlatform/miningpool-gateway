@@ -1,3 +1,4 @@
+//nolint:dupl
 package gooduser
 
 import (
@@ -12,34 +13,32 @@ import (
 	npool "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/gooduser"
 )
 
-func (s *Server) UpdateGoodUser(ctx context.Context, in *npool.UpdateGoodUserRequest) (*npool.UpdateGoodUserResponse, error) {
+func (s *Server) AdminDeleteGoodUser(ctx context.Context, in *npool.AdminDeleteGoodUserRequest) (*npool.AdminDeleteGoodUserResponse, error) {
 	handler, err := gooduser1.NewHandler(
 		ctx,
 		gooduser1.WithID(&in.ID, true),
-		gooduser1.WithRootUserID(in.RootUserID, true),
-		gooduser1.WithHashRate(in.HashRate, false),
-		gooduser1.WithRevenueType(in.RevenueType, false),
+		gooduser1.WithEntID(&in.EntID, true),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(
-			"UpdateGoodUser",
+			"DeleteGoodUser",
 			"In", in,
 			"Error", err,
 		)
-		return &npool.UpdateGoodUserResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminDeleteGoodUserResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
-	info, err := handler.UpdateGoodUser(ctx)
+	info, err := handler.DeleteGoodUser(ctx)
 	if err != nil {
 		logger.Sugar().Errorw(
-			"UpdateGoodUser",
+			"DeleteGoodUser",
 			"In", in,
 			"Error", err,
 		)
-		return &npool.UpdateGoodUserResponse{}, status.Error(codes.Aborted, err.Error())
+		return &npool.AdminDeleteGoodUserResponse{}, status.Error(codes.Aborted, err.Error())
 	}
 
-	return &npool.UpdateGoodUserResponse{
+	return &npool.AdminDeleteGoodUserResponse{
 		Info: info,
 	}, nil
 }
