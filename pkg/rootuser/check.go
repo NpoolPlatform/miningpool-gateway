@@ -2,8 +2,8 @@ package rootuser
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
 	cruder "github.com/NpoolPlatform/libent-cruder/pkg/cruder"
 	v1 "github.com/NpoolPlatform/message/npool/basetypes/v1"
 	rootusermwpb "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/rootuser"
@@ -22,11 +22,11 @@ func (h *Handler) checkRootUser(ctx context.Context) error {
 		},
 	})
 	if err != nil {
-		return err
+		return wlog.WrapError(err)
 	}
 
 	if !exist {
-		return fmt.Errorf("invalid rootuser")
+		return wlog.Errorf("invalid rootuser")
 	}
 	return nil
 }

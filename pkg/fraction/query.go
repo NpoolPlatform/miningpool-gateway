@@ -2,8 +2,8 @@ package fraction
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
 	v1 "github.com/NpoolPlatform/message/npool/basetypes/v1"
 	fractiongwpb "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/fraction"
@@ -14,13 +14,13 @@ import (
 func (h *Handler) GetFraction(ctx context.Context) (*fractiongwpb.Fraction, error) {
 	info, err := fractionmwcli.GetFraction(ctx, *h.EntID)
 	if err != nil {
-		return nil, err
+		return nil, wlog.WrapError(err)
 	}
 	if info == nil {
-		return nil, fmt.Errorf("invalid fraction")
+		return nil, wlog.Errorf("invalid fraction")
 	}
 	if info.UserID != *h.UserID || info.AppID != *h.AppID {
-		return nil, fmt.Errorf("permission denied")
+		return nil, wlog.Errorf("permission denied")
 	}
 	return mw2GW(info), nil
 }
@@ -37,7 +37,7 @@ func (h *Handler) GetUserFractions(ctx context.Context) ([]*fractiongwpb.Fractio
 		},
 	}, h.Offset, h.Limit)
 	if err != nil {
-		return nil, 0, err
+		return nil, 0, wlog.WrapError(err)
 	}
 	return mws2GWs(infos), total, nil
 }

@@ -4,6 +4,7 @@ package fractionrule
 import (
 	"context"
 
+	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
 	fractionrulegwpb "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/fractionrule"
 	fractionrulemwpb "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/fractionrule"
 	fractionrulemwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/fractionrule"
@@ -24,7 +25,7 @@ func (h *Handler) UpdateFractionRule(ctx context.Context) (*fractionrulegwpb.Fra
 		WithdrawRate:     h.WithdrawRate,
 	})
 	if err != nil {
-		return nil, err
+		return nil, wlog.WrapError(err)
 	}
 
 	return h.GetFractionRule(ctx)

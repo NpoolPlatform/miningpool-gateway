@@ -2,8 +2,8 @@ package gooduser
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
 	coinmwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/coin"
 	rootusemwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/rootuser"
 
@@ -25,7 +25,7 @@ func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) 
 	handler := &Handler{}
 	for _, opt := range options {
 		if err := opt(ctx, handler); err != nil {
-			return nil, err
+			return nil, wlog.WrapError(err)
 		}
 	}
 	return handler, nil
@@ -61,7 +61,7 @@ func WithID(u *uint32, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if u == nil {
 			if must {
-				return fmt.Errorf("invalid id")
+				return wlog.Errorf("invalid id")
 			}
 			return nil
 		}
@@ -74,7 +74,7 @@ func WithEntID(id *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if id == nil {
 			if must {
-				return fmt.Errorf("invalid entid")
+				return wlog.Errorf("invalid entid")
 			}
 			return nil
 		}
@@ -87,16 +87,16 @@ func WithPoolCoinTypeID(id *string, must bool) func(context.Context, *Handler) e
 	return func(ctx context.Context, h *Handler) error {
 		if id == nil {
 			if must {
-				return fmt.Errorf("invalid coinid")
+				return wlog.Errorf("invalid coinid")
 			}
 			return nil
 		}
 		exist, err := coinmwcli.ExistCoin(ctx, *id)
 		if err != nil {
-			return err
+			return wlog.WrapError(err)
 		}
 		if !exist {
-			return fmt.Errorf("invalid coinid")
+			return wlog.Errorf("invalid coinid")
 		}
 		h.PoolCoinTypeID = id
 		return nil
@@ -107,16 +107,16 @@ func WithRootUserID(id *string, must bool) func(context.Context, *Handler) error
 	return func(ctx context.Context, h *Handler) error {
 		if id == nil {
 			if must {
-				return fmt.Errorf("invalid rootuserid")
+				return wlog.Errorf("invalid rootuserid")
 			}
 			return nil
 		}
 		exist, err := rootusemwcli.ExistRootUser(ctx, *id)
 		if err != nil {
-			return err
+			return wlog.WrapError(err)
 		}
 		if !exist {
-			return fmt.Errorf("invalid rootuserid")
+			return wlog.Errorf("invalid rootuserid")
 		}
 		h.RootUserID = id
 		return nil

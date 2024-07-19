@@ -2,9 +2,9 @@ package common
 
 import (
 	"context"
-	"fmt"
 
 	coinmwcli "github.com/NpoolPlatform/chain-middleware/pkg/client/coin"
+	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
 )
 
 type CoinCheckHandler struct {
@@ -14,10 +14,10 @@ type CoinCheckHandler struct {
 func (h *CoinCheckHandler) CheckCoinWithCoinTypeID(ctx context.Context, coinTypeID string) error {
 	exist, err := coinmwcli.ExistCoin(ctx, coinTypeID)
 	if err != nil {
-		return err
+		return wlog.WrapError(err)
 	}
 	if !exist {
-		return fmt.Errorf("invalid coin_type_id")
+		return wlog.Errorf("invalid coin_type_id")
 	}
 	return nil
 }

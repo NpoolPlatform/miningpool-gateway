@@ -2,8 +2,8 @@ package fractionrule
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
 	fractionrulegwpb "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/fractionrule"
 	fractionrulemwpb "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/fractionrule"
 	fractionrulemwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/fractionrule"
@@ -12,7 +12,7 @@ import (
 func (h *Handler) GetFractionRules(ctx context.Context) ([]*fractionrulegwpb.FractionRule, uint32, error) {
 	infos, total, err := fractionrulemwcli.GetFractionRules(ctx, &fractionrulemwpb.Conds{}, h.Offset, h.Limit)
 	if err != nil {
-		return nil, 0, err
+		return nil, 0, wlog.WrapError(err)
 	}
 	_infos := []*fractionrulegwpb.FractionRule{}
 	for _, info := range infos {
@@ -25,10 +25,10 @@ func (h *Handler) GetFractionRules(ctx context.Context) ([]*fractionrulegwpb.Fra
 func (h *Handler) GetFractionRule(ctx context.Context) (*fractionrulegwpb.FractionRule, error) {
 	info, err := fractionrulemwcli.GetFractionRule(ctx, *h.EntID)
 	if err != nil {
-		return nil, err
+		return nil, wlog.WrapError(err)
 	}
 	if info == nil {
-		return nil, fmt.Errorf("invalid fractionrule")
+		return nil, wlog.Errorf("invalid fractionrule")
 	}
 	return mw2GW(info), nil
 }

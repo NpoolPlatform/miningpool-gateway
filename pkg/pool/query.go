@@ -2,8 +2,8 @@ package pool
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
 	v1 "github.com/NpoolPlatform/message/npool/basetypes/v1"
 	poolgwpb "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/pool"
@@ -18,13 +18,13 @@ import (
 func (h *Handler) GetPools(ctx context.Context) ([]*poolgwpb.Pool, uint32, error) {
 	infos, total, err := poolmwcli.GetPools(ctx, &poolmwpb.Conds{}, h.Offset, h.Limit)
 	if err != nil {
-		return nil, 0, err
+		return nil, 0, wlog.WrapError(err)
 	}
 	_infos := []*poolgwpb.Pool{}
 	for _, info := range infos {
 		_info, err := h.fullPools(ctx, info)
 		if err != nil {
-			return nil, 0, err
+			return nil, 0, wlog.WrapError(err)
 		}
 		_infos = append(_infos, _info)
 	}
@@ -40,7 +40,7 @@ func (h *Handler) fullPools(ctx context.Context, info *poolmwpb.Pool) (*poolgwpb
 		},
 	}, 0, 0)
 	if err != nil {
-		return nil, err
+		return nil, wlog.WrapError(err)
 	}
 
 	rules := []*fractionrule.FractionRule{}
@@ -50,7 +50,7 @@ func (h *Handler) fullPools(ctx context.Context, info *poolmwpb.Pool) (*poolgwpb
 			Value: info.EntID,
 		}}, 0, 0)
 		if err != nil {
-			return nil, err
+			return nil, wlog.WrapError(err)
 		}
 		rules = append(rules, _rules...)
 	}
@@ -61,10 +61,10 @@ func (h *Handler) fullPools(ctx context.Context, info *poolmwpb.Pool) (*poolgwpb
 func (h *Handler) GetPool(ctx context.Context) (*poolgwpb.Pool, error) {
 	info, err := poolmwcli.GetPool(ctx, *h.EntID)
 	if err != nil {
-		return nil, err
+		return nil, wlog.WrapError(err)
 	}
 	if info == nil {
-		return nil, fmt.Errorf("invalid pool")
+		return nil, wlog.Errorf("invalid pool")
 	}
 	return h.fullPools(ctx, info)
 }

@@ -2,8 +2,8 @@ package fractionrule
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
 	fractionrulegw "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/fractionrule"
 	fractionrulemw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/fractionrule"
 	constant "github.com/NpoolPlatform/miningpool-gateway/pkg/const"
@@ -27,7 +27,7 @@ func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) 
 	handler := &Handler{}
 	for _, opt := range options {
 		if err := opt(ctx, handler); err != nil {
-			return nil, err
+			return nil, wlog.WrapError(err)
 		}
 	}
 	return handler, nil
@@ -56,7 +56,7 @@ func WithID(u *uint32, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if u == nil {
 			if must {
-				return fmt.Errorf("invalid id")
+				return wlog.Errorf("invalid id")
 			}
 			return nil
 		}
@@ -69,7 +69,7 @@ func WithEntID(id *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if id == nil {
 			if must {
-				return fmt.Errorf("invalid entid")
+				return wlog.Errorf("invalid entid")
 			}
 			return nil
 		}
@@ -82,17 +82,17 @@ func WithPoolCoinTypeID(poolcointypeid *string, must bool) func(context.Context,
 	return func(ctx context.Context, h *Handler) error {
 		if poolcointypeid == nil {
 			if must {
-				return fmt.Errorf("invalid poolcointypeid")
+				return wlog.Errorf("invalid poolcointypeid")
 			}
 			return nil
 		}
 
 		exist, err := coinmwcli.ExistCoin(ctx, *poolcointypeid)
 		if err != nil {
-			return err
+			return wlog.WrapError(err)
 		}
 		if !exist {
-			return fmt.Errorf("invalid poolcointypeid")
+			return wlog.Errorf("invalid poolcointypeid")
 		}
 		h.PoolCoinTypeID = poolcointypeid
 		return nil
@@ -103,7 +103,7 @@ func WithWithdrawInterval(withdrawinterval *uint32, must bool) func(context.Cont
 	return func(ctx context.Context, h *Handler) error {
 		if withdrawinterval == nil {
 			if must {
-				return fmt.Errorf("invalid withdrawinterval")
+				return wlog.Errorf("invalid withdrawinterval")
 			}
 			return nil
 		}
@@ -116,13 +116,13 @@ func WithMinAmount(minamount *string, must bool) func(context.Context, *Handler)
 	return func(ctx context.Context, h *Handler) error {
 		if minamount == nil {
 			if must {
-				return fmt.Errorf("invalid minamount")
+				return wlog.Errorf("invalid minamount")
 			}
 			return nil
 		}
 		_, err := decimal.NewFromString(*minamount)
 		if err != nil {
-			return fmt.Errorf("invalid minamount,err: %v", err)
+			return wlog.Errorf("invalid minamount,err: %v", err)
 		}
 		h.MinAmount = minamount
 		return nil
@@ -133,13 +133,13 @@ func WithWithdrawRate(withdrawrate *string, must bool) func(context.Context, *Ha
 	return func(ctx context.Context, h *Handler) error {
 		if withdrawrate == nil {
 			if must {
-				return fmt.Errorf("invalid withdrawrate")
+				return wlog.Errorf("invalid withdrawrate")
 			}
 			return nil
 		}
 		_, err := decimal.NewFromString(*withdrawrate)
 		if err != nil {
-			return fmt.Errorf("invalid withdrawrate,err: %v", err)
+			return wlog.Errorf("invalid withdrawrate,err: %v", err)
 		}
 		h.WithdrawRate = withdrawrate
 		return nil

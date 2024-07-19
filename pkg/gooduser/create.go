@@ -3,6 +3,7 @@ package gooduser
 import (
 	"context"
 
+	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
 	goodusergwpb "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/gooduser"
 	goodusermwpb "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/gooduser"
 	goodusermwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/gooduser"
@@ -21,7 +22,7 @@ func (h *Handler) CreateGoodUser(ctx context.Context) (*goodusergwpb.GoodUser, e
 		PoolCoinTypeID: h.PoolCoinTypeID,
 	})
 	if err != nil {
-		return nil, err
+		return nil, wlog.WrapError(err)
 	}
 
 	return h.GetGoodUser(ctx)

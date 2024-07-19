@@ -2,9 +2,9 @@ package pool
 
 import (
 	"context"
-	"fmt"
 
 	appmwcli "github.com/NpoolPlatform/appuser-middleware/pkg/client/app"
+	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
 	poolmwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/pool"
 
 	poolgw "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/app/pool"
@@ -30,7 +30,7 @@ func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) 
 	handler := &Handler{}
 	for _, opt := range options {
 		if err := opt(ctx, handler); err != nil {
-			return nil, err
+			return nil, wlog.WrapError(err)
 		}
 	}
 	return handler, nil
@@ -85,7 +85,7 @@ func WithID(u *uint32, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if u == nil {
 			if must {
-				return fmt.Errorf("invalid id")
+				return wlog.Errorf("invalid id")
 			}
 			return nil
 		}
@@ -98,7 +98,7 @@ func WithEntID(id *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if id == nil {
 			if must {
-				return fmt.Errorf("invalid entid")
+				return wlog.Errorf("invalid entid")
 			}
 			return nil
 		}
@@ -111,16 +111,16 @@ func WithAppID(id *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if id == nil {
 			if must {
-				return fmt.Errorf("invalid appid")
+				return wlog.Errorf("invalid appid")
 			}
 			return nil
 		}
 		exist, err := appmwcli.ExistApp(ctx, *id)
 		if err != nil {
-			return err
+			return wlog.WrapError(err)
 		}
 		if !exist {
-			return fmt.Errorf("invalid app")
+			return wlog.Errorf("invalid app")
 		}
 		h.AppID = id
 		return nil
@@ -131,16 +131,16 @@ func WithPoolID(id *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if id == nil {
 			if must {
-				return fmt.Errorf("invalid poolid")
+				return wlog.Errorf("invalid poolid")
 			}
 			return nil
 		}
 		exist, err := poolmwcli.ExistPool(ctx, *id)
 		if err != nil {
-			return err
+			return wlog.WrapError(err)
 		}
 		if !exist {
-			return fmt.Errorf("invalid pool")
+			return wlog.Errorf("invalid pool")
 		}
 		h.PoolID = id
 		return nil
@@ -151,16 +151,16 @@ func WithTargetAppID(id *string, must bool) func(context.Context, *Handler) erro
 	return func(ctx context.Context, h *Handler) error {
 		if id == nil {
 			if must {
-				return fmt.Errorf("invalid targetappid")
+				return wlog.Errorf("invalid targetappid")
 			}
 			return nil
 		}
 		exist, err := appmwcli.ExistApp(ctx, *id)
 		if err != nil {
-			return err
+			return wlog.WrapError(err)
 		}
 		if !exist {
-			return fmt.Errorf("invalid app")
+			return wlog.Errorf("invalid app")
 		}
 		h.TargetAppID = id
 		return nil
