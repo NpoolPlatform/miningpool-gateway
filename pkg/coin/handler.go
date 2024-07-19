@@ -148,6 +148,7 @@ func WithPoolID(poolid *string, must bool) func(context.Context, *Handler) error
 	}
 }
 
+//nolint:dupl
 func WithFeeRatio(feeratio *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if feeratio == nil {
@@ -183,6 +184,7 @@ func WithFixedRevenueAble(fixedrevenueable *bool, must bool) func(context.Contex
 	}
 }
 
+//nolint:dupl
 func WithLeastTransferAmount(leastTransferAmount *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if leastTransferAmount == nil {
