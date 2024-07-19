@@ -20,7 +20,6 @@ func (h *Handler) CreateCoin(ctx context.Context) (*coingwpb.Coin, error) {
 		PoolID:                 h.PoolID,
 		CoinTypeID:             h.CoinTypeID,
 		CoinType:               h.CoinType,
-		RevenueType:            h.RevenueType,
 		FeeRatio:               h.FeeRatio,
 		FixedRevenueAble:       h.FixedRevenueAble,
 		LeastTransferAmount:    h.LeastTransferAmount,

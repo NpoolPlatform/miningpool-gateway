@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	mpbasetypes "github.com/NpoolPlatform/message/npool/basetypes/miningpool/v1"
 	basetypes "github.com/NpoolPlatform/message/npool/basetypes/v1"
 	coingw "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/coin"
 	coinmw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/coin"
@@ -22,7 +21,6 @@ type Handler struct {
 	PoolID                 *string
 	CoinTypeID             *string
 	CoinType               *basetypes.CoinType
-	RevenueType            *mpbasetypes.RevenueType
 	FeeRatio               *string
 	FixedRevenueAble       *bool
 	LeastTransferAmount    *string
@@ -52,7 +50,6 @@ func mw2GW(info *coinmw.Coin) *coingw.Coin {
 		PoolID:                 info.PoolID,
 		CoinTypeID:             info.CoinTypeID,
 		CoinType:               info.CoinType,
-		RevenueType:            info.RevenueType,
 		MiningpoolType:         info.MiningpoolType,
 		FeeRatio:               info.FeeRatio,
 		FixedRevenueAble:       info.FixedRevenueAble,
@@ -103,22 +100,6 @@ func WithCoinType(cointype *basetypes.CoinType, must bool) func(context.Context,
 			return fmt.Errorf("invalid cointype,not allow be default type")
 		}
 		h.CoinType = cointype
-		return nil
-	}
-}
-
-func WithRevenueType(revenuetype *mpbasetypes.RevenueType, must bool) func(context.Context, *Handler) error {
-	return func(ctx context.Context, h *Handler) error {
-		if revenuetype == nil {
-			if must {
-				return fmt.Errorf("invalid revenuetype")
-			}
-			return nil
-		}
-		if *revenuetype == mpbasetypes.RevenueType_DefaultRevenueType {
-			return fmt.Errorf("invalid revenuetype,not allow be default type")
-		}
-		h.RevenueType = revenuetype
 		return nil
 	}
 }

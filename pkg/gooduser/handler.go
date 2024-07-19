@@ -44,7 +44,6 @@ func mw2GW(info *goodusermw.GoodUser) *goodusergw.GoodUser {
 		MiningpoolType: info.MiningpoolType,
 		CoinType:       info.CoinType,
 		ReadPageLink:   info.ReadPageLink,
-		RevenueType:    info.RevenueType,
 		CreatedAt:      info.CreatedAt,
 		UpdatedAt:      info.UpdatedAt,
 	}

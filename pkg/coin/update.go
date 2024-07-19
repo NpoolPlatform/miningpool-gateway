@@ -18,7 +18,6 @@ func (h *Handler) UpdateCoin(ctx context.Context) (*coingwpb.Coin, error) {
 	err := coinmwcli.UpdateCoin(ctx, &coinmwpb.CoinReq{
 		ID:                     h.ID,
 		EntID:                  h.EntID,
-		RevenueType:            h.RevenueType,
 		FeeRatio:               h.FeeRatio,
 		FixedRevenueAble:       h.FixedRevenueAble,
 		LeastTransferAmount:    h.LeastTransferAmount,

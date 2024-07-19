@@ -47,7 +47,6 @@ func mw2GW(appinfo *apppoolmw.Pool, info *poolmw.Pool, coins []*coinmw.Coin, rul
 			PoolID:                 v.PoolID,
 			CoinTypeID:             v.CoinTypeID,
 			CoinType:               v.CoinType,
-			RevenueType:            v.RevenueType,
 			FeeRatio:               v.FeeRatio,
 			FixedRevenueAble:       v.FixedRevenueAble,
 			LeastTransferAmount:    v.LeastTransferAmount,

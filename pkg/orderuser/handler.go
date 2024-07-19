@@ -48,7 +48,6 @@ func mw2GW(info *orderusermw.OrderUser) *orderusergw.OrderUser {
 		AutoPay:        info.AutoPay,
 		MiningpoolType: info.MiningpoolType,
 		CoinType:       info.CoinType,
-		RevenueType:    info.RevenueType,
 	}
 }
 
