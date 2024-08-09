@@ -3,13 +3,9 @@ package gooduser
 import (
 	"context"
 
-	coinmwcli "github.com/NpoolPlatform/chain-middleware/pkg/client/coin"
 	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
-	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
 	rootusemwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/rootuser"
 
-	v1 "github.com/NpoolPlatform/message/npool/basetypes/v1"
-	"github.com/NpoolPlatform/message/npool/chain/mw/v1/coin"
 	goodusergw "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/gooduser"
 	goodusermw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/gooduser"
 	constant "github.com/NpoolPlatform/miningpool-gateway/pkg/const"
@@ -87,29 +83,9 @@ func WithEntID(id *string, must bool) func(context.Context, *Handler) error {
 
 func WithCoinTypeIDs(ids []string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
-		coinInfos, _, err := coinmwcli.GetCoins(ctx, &coin.Conds{
-			EntIDs: &v1.StringSliceVal{
-				Op:    cruder.IN,
-				Value: ids,
-			},
-		}, 0, int32(len(ids)))
-		if err != nil {
+		if err := h.checkCoinTypeIDs(ctx, ids); err != nil {
 			return wlog.WrapError(err)
 		}
-
-		for _, id := range ids {
-			exist := false
-			for _, coinInfo := range coinInfos {
-				if coinInfo.EntID == id {
-					exist = true
-					break
-				}
-			}
-			if !exist {
-				return wlog.Errorf("invalid cointypeids")
-			}
-		}
-
 		h.CoinTypeIDs = ids
 		return nil
 	}
