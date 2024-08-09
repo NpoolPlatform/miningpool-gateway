@@ -16,7 +16,7 @@ import (
 func (s *Server) AdminCreateGoodUser(ctx context.Context, in *npool.AdminCreateGoodUserRequest) (*npool.AdminCreateGoodUserResponse, error) {
 	handler, err := gooduser1.NewHandler(
 		ctx,
-		gooduser1.WithPoolCoinTypeID(&in.PoolCoinTypeID, true),
+		gooduser1.WithCoinTypeIDs(in.CoinTypeIDs, true),
 		gooduser1.WithRootUserID(&in.RootUserID, true),
 	)
 	if err != nil {

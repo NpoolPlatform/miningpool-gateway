@@ -3,22 +3,25 @@ package gooduser
 import (
 	"context"
 
+	coinmwcli "github.com/NpoolPlatform/chain-middleware/pkg/client/coin"
 	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
-	coinmwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/coin"
+	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
 	rootusemwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/rootuser"
 
+	v1 "github.com/NpoolPlatform/message/npool/basetypes/v1"
+	"github.com/NpoolPlatform/message/npool/chain/mw/v1/coin"
 	goodusergw "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/gooduser"
 	goodusermw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/gooduser"
 	constant "github.com/NpoolPlatform/miningpool-gateway/pkg/const"
 )
 
 type Handler struct {
-	ID             *uint32
-	EntID          *string
-	PoolCoinTypeID *string
-	RootUserID     *string
-	Offset         int32
-	Limit          int32
+	ID          *uint32
+	EntID       *string
+	CoinTypeIDs []string
+	RootUserID  *string
+	Offset      int32
+	Limit       int32
 }
 
 func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) error) (*Handler, error) {
@@ -40,9 +43,8 @@ func mw2GW(info *goodusermw.GoodUser) *goodusergw.GoodUser {
 		EntID:          info.EntID,
 		Name:           info.Name,
 		RootUserID:     info.RootUserID,
-		PoolCoinTypeID: info.PoolCoinTypeID,
+		PoolID:         info.PoolID,
 		MiningpoolType: info.MiningpoolType,
-		CoinType:       info.CoinType,
 		ReadPageLink:   info.ReadPageLink,
 		CreatedAt:      info.CreatedAt,
 		UpdatedAt:      info.UpdatedAt,
@@ -83,22 +85,32 @@ func WithEntID(id *string, must bool) func(context.Context, *Handler) error {
 	}
 }
 
-func WithPoolCoinTypeID(id *string, must bool) func(context.Context, *Handler) error {
+func WithCoinTypeIDs(ids []string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
-		if id == nil {
-			if must {
-				return wlog.Errorf("invalid coinid")
-			}
-			return nil
-		}
-		exist, err := coinmwcli.ExistCoin(ctx, *id)
+		coinInfos, _, err := coinmwcli.GetCoins(ctx, &coin.Conds{
+			EntIDs: &v1.StringSliceVal{
+				Op:    cruder.IN,
+				Value: ids,
+			},
+		}, 0, int32(len(ids)))
 		if err != nil {
 			return wlog.WrapError(err)
 		}
-		if !exist {
-			return wlog.Errorf("invalid coinid")
+
+		for _, id := range ids {
+			exist := false
+			for _, coinInfo := range coinInfos {
+				if coinInfo.EntID == id {
+					exist = true
+					break
+				}
+			}
+			if !exist {
+				return wlog.Errorf("invalid cointypeids")
+			}
 		}
-		h.PoolCoinTypeID = id
+
+		h.CoinTypeIDs = ids
 		return nil
 	}
 }
