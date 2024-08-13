@@ -21,6 +21,7 @@ func (h *Handler) UpdateFractionRule(ctx context.Context) (*fractionrulegwpb.Fra
 		ID:               h.ID,
 		EntID:            h.EntID,
 		WithdrawInterval: h.WithdrawInterval,
+		PayoutThreshold:  h.PayoutThreshold,
 		MinAmount:        h.MinAmount,
 		WithdrawRate:     h.WithdrawRate,
 	})

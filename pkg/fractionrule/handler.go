@@ -17,6 +17,7 @@ type Handler struct {
 	EntID            *string
 	PoolCoinTypeID   *string
 	WithdrawInterval *uint32
+	PayoutThreshold  *string
 	MinAmount        *string
 	WithdrawRate     *string
 	Offset           int32
@@ -43,6 +44,7 @@ func mw2GW(info *fractionrulemw.FractionRule) *fractionrulegw.FractionRule {
 		PoolID:           info.PoolID,
 		PoolCoinTypeID:   info.PoolCoinTypeID,
 		WithdrawInterval: info.WithdrawInterval,
+		PayoutThreshold:  info.PayoutThreshold,
 		MinAmount:        info.MinAmount,
 		WithdrawRate:     info.WithdrawRate,
 		MiningpoolType:   info.MiningpoolType,
@@ -125,6 +127,23 @@ func WithMinAmount(minamount *string, must bool) func(context.Context, *Handler)
 			return wlog.Errorf("invalid minamount,err: %v", err)
 		}
 		h.MinAmount = minamount
+		return nil
+	}
+}
+
+func WithPayoutThreshold(payoutthreshold *string, must bool) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if payoutthreshold == nil {
+			if must {
+				return wlog.Errorf("invalid payoutthreshold")
+			}
+			return nil
+		}
+		_, err := decimal.NewFromString(*payoutthreshold)
+		if err != nil {
+			return wlog.Errorf("invalid payoutthreshold,err: %v", err)
+		}
+		h.PayoutThreshold = payoutthreshold
 		return nil
 	}
 }

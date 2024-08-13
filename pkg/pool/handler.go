@@ -62,6 +62,7 @@ func mw2GW(info *poolmw.Pool, coins []*coinmw.Coin, rules []*fractionrulemw.Frac
 			EntID:            v.EntID,
 			PoolCoinTypeID:   v.PoolCoinTypeID,
 			WithdrawInterval: v.WithdrawInterval,
+			PayoutThreshold:  v.PayoutThreshold,
 			MinAmount:        v.MinAmount,
 			WithdrawRate:     v.WithdrawRate,
 			CreatedAt:        v.CreatedAt,

@@ -17,6 +17,7 @@ func (s *Server) AdminCreateFractionRule(ctx context.Context, in *npool.AdminCre
 		ctx,
 		fractionrule1.WithPoolCoinTypeID(&in.PoolCoinTypeID, true),
 		fractionrule1.WithWithdrawInterval(&in.WithdrawInterval, true),
+		fractionrule1.WithPayoutThreshold(&in.PayoutThreshold, true),
 		fractionrule1.WithMinAmount(&in.MinAmount, true),
 		fractionrule1.WithWithdrawRate(&in.WithdrawRate, true),
 	)

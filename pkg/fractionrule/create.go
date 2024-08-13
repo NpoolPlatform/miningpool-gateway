@@ -21,6 +21,7 @@ func (h *Handler) CreateFractionRule(ctx context.Context) (*fractionrulegwpb.Fra
 		EntID:            h.EntID,
 		PoolCoinTypeID:   h.PoolCoinTypeID,
 		WithdrawInterval: h.WithdrawInterval,
+		PayoutThreshold:  h.PayoutThreshold,
 		MinAmount:        h.MinAmount,
 		WithdrawRate:     h.WithdrawRate,
 	})

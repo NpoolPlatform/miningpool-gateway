@@ -18,6 +18,7 @@ func (s *Server) AdminUpdateFractionRule(ctx context.Context, in *npool.AdminUpd
 		fractionrule1.WithID(&in.ID, true),
 		fractionrule1.WithEntID(&in.EntID, true),
 		fractionrule1.WithWithdrawInterval(in.WithdrawInterval, false),
+		fractionrule1.WithPayoutThreshold(in.PayoutThreshold, false),
 		fractionrule1.WithMinAmount(in.MinAmount, false),
 		fractionrule1.WithWithdrawRate(in.WithdrawRate, false),
 	)
