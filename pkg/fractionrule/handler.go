@@ -49,6 +49,7 @@ func mw2GW(info *fractionrulemw.FractionRule) *fractionrulegw.FractionRule {
 		WithdrawRate:     info.WithdrawRate,
 		MiningpoolType:   info.MiningpoolType,
 		CoinType:         info.CoinType,
+		CoinTypeID:       info.CoinTypeID,
 		CreatedAt:        info.CreatedAt,
 		UpdatedAt:        info.UpdatedAt,
 	}
