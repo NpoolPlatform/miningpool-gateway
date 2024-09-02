@@ -60,19 +60,19 @@ spec:
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
-          - path: "/api/miningpool/v1/admin/create/miningpoolfractionrule"
+          - path: "/api/miningpool/v1/admin/create/miningpoolfractionwithdrawalrule"
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
-          - path: "/api/miningpool/v1/admin/update/miningpoolfractionrule"
+          - path: "/api/miningpool/v1/admin/update/miningpoolfractionwithdrawalrule"
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
-          - path: "/api/miningpool/v1/admin/get/miningpoolfractionrules"
+          - path: "/api/miningpool/v1/admin/get/miningpoolfractionwithdrawalrules"
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860
-          - path: "/api/miningpool/v1/admin/delete/miningpoolfractionrule"
+          - path: "/api/miningpool/v1/admin/delete/miningpoolfractionwithdrawalrule"
             backend:
               serviceName: miningpool-gateway
               servicePort: 50860

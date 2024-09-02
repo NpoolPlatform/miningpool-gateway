@@ -1,4 +1,4 @@
-package fraction
+package fractionwithdrawal
 
 import (
 	"context"
@@ -9,23 +9,23 @@ import (
 	orderusemwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/orderuser"
 
 	basetypes "github.com/NpoolPlatform/message/npool/basetypes/miningpool/v1"
-	fractiongw "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/fraction"
-	fractionmw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/fraction"
+	fractionwithdrawalgw "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/fractionwithdrawal"
+	fractionwithdrawalmw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/fractionwithdrawal"
 	constant "github.com/NpoolPlatform/miningpool-gateway/pkg/const"
 )
 
 type Handler struct {
-	ID            *uint32
-	EntID         *string
-	AppID         *string
-	UserID        *string
-	OrderUserID   *string
-	WithdrawState *basetypes.WithdrawState
-	WithdrawAt    *uint32
-	PromisePayAt  *uint32
-	Msg           *string
-	Offset        int32
-	Limit         int32
+	ID                    *uint32
+	EntID                 *string
+	AppID                 *string
+	UserID                *string
+	OrderUserID           *string
+	FractionWithdrawState *basetypes.FractionWithdrawState
+	WithdrawAt            *uint32
+	PromisePayAt          *uint32
+	Msg                   *string
+	Offset                int32
+	Limit                 int32
 }
 
 func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) error) (*Handler, error) {
@@ -38,27 +38,27 @@ func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) 
 	return handler, nil
 }
 
-func mw2GW(info *fractionmw.Fraction) *fractiongw.Fraction {
+func mw2GW(info *fractionwithdrawalmw.FractionWithdrawal) *fractionwithdrawalgw.FractionWithdrawal {
 	if info == nil {
 		return nil
 	}
-	return &fractiongw.Fraction{
-		ID:            info.ID,
-		EntID:         info.EntID,
-		AppID:         info.AppID,
-		UserID:        info.UserID,
-		OrderUserID:   info.OrderUserID,
-		WithdrawState: info.WithdrawState,
-		WithdrawAt:    info.WithdrawAt,
-		PromisePayAt:  info.PromisePayAt,
-		Msg:           info.Msg,
-		CreatedAt:     info.CreatedAt,
-		UpdatedAt:     info.UpdatedAt,
+	return &fractionwithdrawalgw.FractionWithdrawal{
+		ID:                    info.ID,
+		EntID:                 info.EntID,
+		AppID:                 info.AppID,
+		UserID:                info.UserID,
+		OrderUserID:           info.OrderUserID,
+		FractionWithdrawState: info.FractionWithdrawState,
+		WithdrawAt:            info.WithdrawAt,
+		PromisePayAt:          info.PromisePayAt,
+		Msg:                   info.Msg,
+		CreatedAt:             info.CreatedAt,
+		UpdatedAt:             info.UpdatedAt,
 	}
 }
 
-func mws2GWs(infos []*fractionmw.Fraction) []*fractiongw.Fraction {
-	_infos := []*fractiongw.Fraction{}
+func mws2GWs(infos []*fractionwithdrawalmw.FractionWithdrawal) []*fractionwithdrawalgw.FractionWithdrawal {
+	_infos := []*fractionwithdrawalgw.FractionWithdrawal{}
 	for _, v := range infos {
 		_infos = append(_infos, mw2GW(v))
 	}

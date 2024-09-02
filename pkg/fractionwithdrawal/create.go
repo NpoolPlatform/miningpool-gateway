@@ -1,4 +1,4 @@
-package fraction
+package fractionwithdrawal
 
 import (
 	"context"
@@ -8,9 +8,9 @@ import (
 	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
 	"github.com/google/uuid"
 
-	fractiongwpb "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/fraction"
-	"github.com/NpoolPlatform/message/npool/miningpool/mw/v1/fraction"
-	fractionmwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/fraction"
+	fractionwithdrawalgwpb "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/fractionwithdrawal"
+	"github.com/NpoolPlatform/message/npool/miningpool/mw/v1/fractionwithdrawal"
+	fractionwithdrawalmwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/fractionwithdrawal"
 	orderusermwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/orderuser"
 )
 
@@ -36,7 +36,7 @@ func (h *Handler) getApp(ctx context.Context) error {
 	return nil
 }
 
-func (h *Handler) CreateFraction(ctx context.Context) (*fractiongwpb.Fraction, error) {
+func (h *Handler) CreateFractionWithdrawal(ctx context.Context) (*fractionwithdrawalgwpb.FractionWithdrawal, error) {
 	if err := h.getApp(ctx); err != nil {
 		return nil, wlog.WrapError(err)
 	}
@@ -58,7 +58,7 @@ func (h *Handler) CreateFraction(ctx context.Context) (*fractiongwpb.Fraction, e
 		h.EntID = func() *string { s := uuid.NewString(); return &s }()
 	}
 
-	err = fractionmwcli.CreateFraction(ctx, &fraction.FractionReq{
+	err = fractionwithdrawalmwcli.CreateFractionWithdrawal(ctx, &fractionwithdrawal.FractionWithdrawalReq{
 		EntID:       h.EntID,
 		AppID:       h.AppID,
 		UserID:      h.UserID,
@@ -68,5 +68,5 @@ func (h *Handler) CreateFraction(ctx context.Context) (*fractiongwpb.Fraction, e
 		return nil, wlog.WrapError(err)
 	}
 
-	return h.GetFraction(ctx)
+	return h.GetFractionWithdrawal(ctx)
 }

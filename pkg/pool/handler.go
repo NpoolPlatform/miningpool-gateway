@@ -8,7 +8,7 @@ import (
 	basetypes "github.com/NpoolPlatform/message/npool/basetypes/miningpool/v1"
 	poolgw "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/pool"
 	coinmw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/coin"
-	fractionrulemw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/fractionrule"
+	fractionwithdrawalrulemw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/fractionwithdrawalrule"
 	poolmw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/pool"
 	constant "github.com/NpoolPlatform/miningpool-gateway/pkg/const"
 )
@@ -35,7 +35,7 @@ func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) 
 	return handler, nil
 }
 
-func mw2GW(info *poolmw.Pool, coins []*coinmw.Coin, rules []*fractionrulemw.FractionRule) *poolgw.Pool {
+func mw2GW(info *poolmw.Pool, coins []*coinmw.Coin, rules []*fractionwithdrawalrulemw.FractionWithdrawalRule) *poolgw.Pool {
 	if info == nil {
 		return nil
 	}
@@ -56,32 +56,32 @@ func mw2GW(info *poolmw.Pool, coins []*coinmw.Coin, rules []*fractionrulemw.Frac
 		})
 	}
 
-	_rules := []*poolgw.FractionRule{}
+	_rules := []*poolgw.FractionWithdrawalRule{}
 	for _, v := range rules {
-		_rules = append(_rules, &poolgw.FractionRule{
-			EntID:            v.EntID,
-			PoolCoinTypeID:   v.PoolCoinTypeID,
-			WithdrawInterval: v.WithdrawInterval,
-			PayoutThreshold:  v.PayoutThreshold,
-			MinAmount:        v.MinAmount,
-			WithdrawRate:     v.WithdrawRate,
-			CreatedAt:        v.CreatedAt,
-			UpdatedAt:        v.UpdatedAt,
+		_rules = append(_rules, &poolgw.FractionWithdrawalRule{
+			EntID:                 v.EntID,
+			PoolCoinTypeID:        v.PoolCoinTypeID,
+			WithdrawInterval:      v.WithdrawInterval,
+			PayoutThreshold:       v.PayoutThreshold,
+			LeastWithdrawalAmount: v.LeastWithdrawalAmount,
+			WithdrawFee:           v.WithdrawFee,
+			CreatedAt:             v.CreatedAt,
+			UpdatedAt:             v.UpdatedAt,
 		})
 	}
 
 	return &poolgw.Pool{
-		ID:             info.ID,
-		EntID:          info.EntID,
-		MiningpoolType: info.MiningpoolType,
-		Name:           info.Name,
-		Site:           info.Site,
-		Logo:           info.Logo,
-		Description:    info.Description,
-		Coins:          _coins,
-		FractionRules:  _rules,
-		CreatedAt:      info.CreatedAt,
-		UpdatedAt:      info.UpdatedAt,
+		ID:                      info.ID,
+		EntID:                   info.EntID,
+		MiningpoolType:          info.MiningpoolType,
+		Name:                    info.Name,
+		Site:                    info.Site,
+		Logo:                    info.Logo,
+		Description:             info.Description,
+		Coins:                   _coins,
+		FractionWithdrawalRules: _rules,
+		CreatedAt:               info.CreatedAt,
+		UpdatedAt:               info.UpdatedAt,
 	}
 }
 

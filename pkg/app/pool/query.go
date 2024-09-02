@@ -9,10 +9,10 @@ import (
 	poolgwpb "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/app/pool"
 	apppoolmwpb "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/app/pool"
 	"github.com/NpoolPlatform/message/npool/miningpool/mw/v1/coin"
-	"github.com/NpoolPlatform/message/npool/miningpool/mw/v1/fractionrule"
+	"github.com/NpoolPlatform/message/npool/miningpool/mw/v1/fractionwithdrawalrule"
 	apppoolmwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/app/pool"
 	coinmwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/coin"
-	fractionrulemwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/fractionrule"
+	fractionwithdrawalrulemwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/fractionwithdrawalrule"
 	poolmwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/pool"
 )
 
@@ -67,9 +67,9 @@ func fullPools(ctx context.Context, apppoolID string) (*poolgwpb.Pool, error) {
 		return nil, wlog.WrapError(err)
 	}
 
-	rules := []*fractionrule.FractionRule{}
+	rules := []*fractionwithdrawalrule.FractionWithdrawalRule{}
 	for _, info := range coins {
-		_rules, _, err := fractionrulemwcli.GetFractionRules(ctx, &fractionrule.Conds{PoolCoinTypeID: &v1.StringVal{
+		_rules, _, err := fractionwithdrawalrulemwcli.GetFractionWithdrawalRules(ctx, &fractionwithdrawalrule.Conds{PoolCoinTypeID: &v1.StringVal{
 			Op:    cruder.EQ,
 			Value: info.EntID,
 		}}, 0, 0)

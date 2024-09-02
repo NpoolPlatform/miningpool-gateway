@@ -1,11 +1,11 @@
-package fractionrule
+package fractionwithdrawalrule
 
 import (
 	"context"
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
-	fractionrulegw "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/fractionrule"
-	fractionrulemw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/fractionrule"
+	fractionwithdrawalrulegw "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/fractionwithdrawalrule"
+	fractionwithdrawalrulemw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/fractionwithdrawalrule"
 	constant "github.com/NpoolPlatform/miningpool-gateway/pkg/const"
 	coinmwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/coin"
 
@@ -13,15 +13,15 @@ import (
 )
 
 type Handler struct {
-	ID               *uint32
-	EntID            *string
-	PoolCoinTypeID   *string
-	WithdrawInterval *uint32
-	PayoutThreshold  *string
-	MinAmount        *string
-	WithdrawRate     *string
-	Offset           int32
-	Limit            int32
+	ID                    *uint32
+	EntID                 *string
+	PoolCoinTypeID        *string
+	WithdrawInterval      *uint32
+	PayoutThreshold       *string
+	LeastWithdrawalAmount *string
+	WithdrawFee           *string
+	Offset                int32
+	Limit                 int32
 }
 
 func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) error) (*Handler, error) {
@@ -34,24 +34,24 @@ func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) 
 	return handler, nil
 }
 
-func mw2GW(info *fractionrulemw.FractionRule) *fractionrulegw.FractionRule {
+func mw2GW(info *fractionwithdrawalrulemw.FractionWithdrawalRule) *fractionwithdrawalrulegw.FractionWithdrawalRule {
 	if info == nil {
 		return nil
 	}
-	return &fractionrulegw.FractionRule{
-		ID:               info.ID,
-		EntID:            info.EntID,
-		PoolID:           info.PoolID,
-		PoolCoinTypeID:   info.PoolCoinTypeID,
-		WithdrawInterval: info.WithdrawInterval,
-		PayoutThreshold:  info.PayoutThreshold,
-		MinAmount:        info.MinAmount,
-		WithdrawRate:     info.WithdrawRate,
-		MiningpoolType:   info.MiningpoolType,
-		CoinType:         info.CoinType,
-		CoinTypeID:       info.CoinTypeID,
-		CreatedAt:        info.CreatedAt,
-		UpdatedAt:        info.UpdatedAt,
+	return &fractionwithdrawalrulegw.FractionWithdrawalRule{
+		ID:                    info.ID,
+		EntID:                 info.EntID,
+		PoolID:                info.PoolID,
+		PoolCoinTypeID:        info.PoolCoinTypeID,
+		WithdrawInterval:      info.WithdrawInterval,
+		PayoutThreshold:       info.PayoutThreshold,
+		LeastWithdrawalAmount: info.LeastWithdrawalAmount,
+		WithdrawFee:           info.WithdrawFee,
+		MiningpoolType:        info.MiningpoolType,
+		CoinType:              info.CoinType,
+		CoinTypeID:            info.CoinTypeID,
+		CreatedAt:             info.CreatedAt,
+		UpdatedAt:             info.UpdatedAt,
 	}
 }
 
@@ -115,7 +115,7 @@ func WithWithdrawInterval(withdrawinterval *uint32, must bool) func(context.Cont
 	}
 }
 
-func WithMinAmount(minamount *string, must bool) func(context.Context, *Handler) error {
+func WithLeastWithdrawalAmount(minamount *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if minamount == nil {
 			if must {
@@ -127,7 +127,7 @@ func WithMinAmount(minamount *string, must bool) func(context.Context, *Handler)
 		if err != nil {
 			return wlog.Errorf("invalid minamount,err: %v", err)
 		}
-		h.MinAmount = minamount
+		h.LeastWithdrawalAmount = minamount
 		return nil
 	}
 }
@@ -149,7 +149,7 @@ func WithPayoutThreshold(payoutthreshold *string, must bool) func(context.Contex
 	}
 }
 
-func WithWithdrawRate(withdrawrate *string, must bool) func(context.Context, *Handler) error {
+func WithWithdrawFee(withdrawrate *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if withdrawrate == nil {
 			if must {
@@ -161,7 +161,7 @@ func WithWithdrawRate(withdrawrate *string, must bool) func(context.Context, *Ha
 		if err != nil {
 			return wlog.Errorf("invalid withdrawrate,err: %v", err)
 		}
-		h.WithdrawRate = withdrawrate
+		h.WithdrawFee = withdrawrate
 		return nil
 	}
 }
