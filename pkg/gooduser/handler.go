@@ -40,7 +40,7 @@ func mw2GW(info *goodusermw.GoodUser) *goodusergw.GoodUser {
 		Name:           info.Name,
 		RootUserID:     info.RootUserID,
 		PoolID:         info.PoolID,
-		MiningpoolType: info.MiningpoolType,
+		MiningPoolType: info.MiningPoolType,
 		ReadPageLink:   info.ReadPageLink,
 		CreatedAt:      info.CreatedAt,
 		UpdatedAt:      info.UpdatedAt,

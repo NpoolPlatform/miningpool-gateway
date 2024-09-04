@@ -47,7 +47,7 @@ func mw2GW(info *fractionwithdrawalrulemw.FractionWithdrawalRule) *fractionwithd
 		PayoutThreshold:       info.PayoutThreshold,
 		LeastWithdrawalAmount: info.LeastWithdrawalAmount,
 		WithdrawFee:           info.WithdrawFee,
-		MiningpoolType:        info.MiningpoolType,
+		MiningPoolType:        info.MiningPoolType,
 		CoinType:              info.CoinType,
 		CoinTypeID:            info.CoinTypeID,
 		CreatedAt:             info.CreatedAt,

@@ -50,7 +50,7 @@ func mw2GW(info *coinmw.Coin) *coingw.Coin {
 		PoolID:                 info.PoolID,
 		CoinTypeID:             info.CoinTypeID,
 		CoinType:               info.CoinType,
-		MiningpoolType:         info.MiningpoolType,
+		MiningPoolType:         info.MiningPoolType,
 		FeeRatio:               info.FeeRatio,
 		FixedRevenueAble:       info.FixedRevenueAble,
 		LeastTransferAmount:    info.LeastTransferAmount,

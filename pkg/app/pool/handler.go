@@ -74,7 +74,7 @@ func mw2GW(appinfo *apppoolmw.Pool, info *poolmw.Pool, coins []*coinmw.Coin, rul
 		PoolID:                  info.EntID,
 		Name:                    info.Name,
 		Logo:                    info.Logo,
-		MiningpoolType:          info.MiningpoolType,
+		MiningPoolType:          info.MiningPoolType,
 		Site:                    info.Site,
 		Description:             info.Description,
 		Coins:                   _coins,

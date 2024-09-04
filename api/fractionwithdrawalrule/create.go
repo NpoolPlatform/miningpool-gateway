@@ -12,7 +12,8 @@ import (
 	npool "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/fractionwithdrawalrule"
 )
 
-func (s *Server) AdminCreateFractionWithdrawalRule(ctx context.Context, in *npool.AdminCreateFractionWithdrawalRuleRequest) (*npool.AdminCreateFractionWithdrawalRuleResponse, error) {
+func (s *Server) AdminCreateFractionWithdrawalRule(ctx context.Context,
+	in *npool.AdminCreateFractionWithdrawalRuleRequest) (*npool.AdminCreateFractionWithdrawalRuleResponse, error) {
 	handler, err := fractionwithdrawalrule1.NewHandler(
 		ctx,
 		fractionwithdrawalrule1.WithPoolCoinTypeID(&in.PoolCoinTypeID, true),

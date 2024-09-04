@@ -16,7 +16,7 @@ import (
 type Handler struct {
 	ID             *uint32
 	EntID          *string
-	MiningpoolType *basetypes.MiningpoolType
+	MiningPoolType *basetypes.MiningPoolType
 	Name           *string
 	Site           *string
 	Logo           *string
@@ -73,7 +73,7 @@ func mw2GW(info *poolmw.Pool, coins []*coinmw.Coin, rules []*fractionwithdrawalr
 	return &poolgw.Pool{
 		ID:                      info.ID,
 		EntID:                   info.EntID,
-		MiningpoolType:          info.MiningpoolType,
+		MiningPoolType:          info.MiningPoolType,
 		Name:                    info.Name,
 		Site:                    info.Site,
 		Logo:                    info.Logo,
@@ -111,7 +111,7 @@ func WithEntID(id *string, must bool) func(context.Context, *Handler) error {
 	}
 }
 
-func WithMiningpoolType(miningpooltype *basetypes.MiningpoolType, must bool) func(context.Context, *Handler) error {
+func WithMiningPoolType(miningpooltype *basetypes.MiningPoolType, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if miningpooltype == nil {
 			if must {
@@ -119,10 +119,10 @@ func WithMiningpoolType(miningpooltype *basetypes.MiningpoolType, must bool) fun
 			}
 			return nil
 		}
-		if *miningpooltype == basetypes.MiningpoolType_DefaultMiningpoolType {
+		if *miningpooltype == basetypes.MiningPoolType_DefaultMiningPoolType {
 			return wlog.Errorf("invalid miningpooltype,not allow be default type")
 		}
-		h.MiningpoolType = miningpooltype
+		h.MiningPoolType = miningpooltype
 
 		return nil
 	}

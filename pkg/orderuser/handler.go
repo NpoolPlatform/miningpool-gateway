@@ -43,7 +43,7 @@ func mw2GW(info *orderusermw.OrderUser) *orderusergw.OrderUser {
 		GoodUserID:     info.GoodUserID,
 		Name:           info.Name,
 		ReadPageLink:   info.ReadPageLink,
-		MiningpoolType: info.MiningpoolType,
+		MiningPoolType: info.MiningPoolType,
 		CreatedAt:      info.CreatedAt,
 		UpdatedAt:      info.UpdatedAt,
 	}

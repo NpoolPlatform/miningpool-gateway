@@ -19,7 +19,7 @@ func (h *Handler) CreatePool(ctx context.Context) (*poolgwpb.Pool, error) {
 
 	err := poolmwcli.CreatePool(ctx, &poolmwpb.PoolReq{
 		EntID:          h.EntID,
-		MiningpoolType: h.MiningpoolType,
+		MiningPoolType: h.MiningPoolType,
 		Name:           h.Name,
 		Site:           h.Site,
 		Logo:           h.Logo,

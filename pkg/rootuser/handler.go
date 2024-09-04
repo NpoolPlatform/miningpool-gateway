@@ -45,7 +45,7 @@ func mw2GW(info *rootusermw.RootUser) *rootusergw.RootUser {
 		AuthToken:      info.AuthToken,
 		Authed:         info.Authed,
 		Remark:         info.Remark,
-		MiningpoolType: info.MiningpoolType,
+		MiningPoolType: info.MiningPoolType,
 		CreatedAt:      info.CreatedAt,
 		UpdatedAt:      info.UpdatedAt,
 	}
