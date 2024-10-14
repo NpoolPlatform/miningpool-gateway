@@ -63,6 +63,7 @@ func (h *Handler) CreateFractionWithdrawal(ctx context.Context) (*fractionwithdr
 		AppID:       h.AppID,
 		UserID:      h.UserID,
 		OrderUserID: h.OrderUserID,
+		CoinTypeID:  h.CoinTypeID,
 	})
 	if err != nil {
 		return nil, wlog.WrapError(err)

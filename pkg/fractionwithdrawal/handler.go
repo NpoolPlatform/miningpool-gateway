@@ -6,6 +6,7 @@ import (
 	appmwcli "github.com/NpoolPlatform/appuser-middleware/pkg/client/app"
 	usermwcli "github.com/NpoolPlatform/appuser-middleware/pkg/client/user"
 	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
+	"github.com/NpoolPlatform/miningpool-gateway/pkg/common"
 	orderusemwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/orderuser"
 
 	basetypes "github.com/NpoolPlatform/message/npool/basetypes/miningpool/v1"
@@ -20,6 +21,7 @@ type Handler struct {
 	AppID                 *string
 	UserID                *string
 	OrderUserID           *string
+	CoinTypeID            *string
 	FractionWithdrawState *basetypes.FractionWithdrawState
 	WithdrawAt            *uint32
 	PromisePayAt          *uint32
@@ -48,6 +50,7 @@ func mw2GW(info *fractionwithdrawalmw.FractionWithdrawal) *fractionwithdrawalgw.
 		AppID:                 info.AppID,
 		UserID:                info.UserID,
 		OrderUserID:           info.OrderUserID,
+		CoinTypeID:            info.CoinTypeID,
 		FractionWithdrawState: info.FractionWithdrawState,
 		WithdrawAt:            info.WithdrawAt,
 		PromisePayAt:          info.PromisePayAt,
@@ -153,6 +156,24 @@ func WithOrderUserID(id *string, must bool) func(context.Context, *Handler) erro
 			return wlog.Errorf("invalid orderuser")
 		}
 		h.OrderUserID = id
+		return nil
+	}
+}
+
+func WithCoinTypeID(id *string, must bool) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if id == nil {
+			if must {
+				return wlog.Errorf("invalid cointypeid")
+			}
+			return nil
+		}
+		ccHandler := common.CoinCheckHandler{CoinTypeID: id}
+		err := ccHandler.CheckCoin(ctx)
+		if err != nil {
+			return wlog.WrapError(err)
+		}
+		h.CoinTypeID = id
 		return nil
 	}
 }
