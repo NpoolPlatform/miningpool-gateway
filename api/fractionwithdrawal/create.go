@@ -12,7 +12,6 @@ import (
 	npool "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/fractionwithdrawal"
 )
 
-//nolint:dupl
 func (s *Server) CreateFractionWithdrawal(ctx context.Context, in *npool.CreateFractionWithdrawalRequest) (*npool.CreateFractionWithdrawalResponse, error) {
 	handler, err := fractionwithdrawal1.NewHandler(
 		ctx,

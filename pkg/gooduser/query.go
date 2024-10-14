@@ -18,6 +18,11 @@ func (h *Handler) GetGoodUsers(ctx context.Context) ([]*goodusergwpb.GoodUser, u
 }
 
 func (h *Handler) GetGoodUser(ctx context.Context) (*goodusergwpb.GoodUser, error) {
+	err := h.checkGoodUser(ctx)
+	if err != nil {
+		return nil, wlog.WrapError(err)
+	}
+
 	info, err := goodusermwcli.GetGoodUser(ctx, *h.EntID)
 	if err != nil {
 		return nil, wlog.WrapError(err)
