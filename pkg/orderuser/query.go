@@ -21,3 +21,16 @@ func (h *Handler) GetOrderUser(ctx context.Context) (*orderusergwpb.OrderUser, e
 	}
 	return mw2GW(info), nil
 }
+
+func (h *Handler) GetOrderUserProportion(ctx context.Context) (string, error) {
+	err := h.checkOrderUser(ctx)
+	if err != nil {
+		return "0", wlog.WrapError(err)
+	}
+
+	proportion, err := orderusermwcli.GetOrderUserProportion(ctx, *h.EntID, *h.CoinTypeID)
+	if err != nil {
+		return "0", wlog.WrapError(err)
+	}
+	return proportion, nil
+}

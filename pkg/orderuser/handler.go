@@ -5,19 +5,23 @@ import (
 
 	appmwcli "github.com/NpoolPlatform/appuser-middleware/pkg/client/app"
 	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
+	"github.com/shopspring/decimal"
 
 	orderusergw "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/orderuser"
 	orderusermw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/orderuser"
+	"github.com/NpoolPlatform/miningpool-gateway/pkg/common"
 	constant "github.com/NpoolPlatform/miningpool-gateway/pkg/const"
 )
 
 type Handler struct {
-	ID     *uint32
-	EntID  *string
-	AppID  *string
-	UserID *string
-	Offset int32
-	Limit  int32
+	ID         *uint32
+	EntID      *string
+	AppID      *string
+	UserID     *string
+	CoinTypeID *string
+	Proportion *decimal.Decimal
+	Offset     int32
+	Limit      int32
 }
 
 func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) error) (*Handler, error) {
@@ -104,6 +108,41 @@ func WithUserID(id *string, must bool) func(context.Context, *Handler) error {
 			return nil
 		}
 		h.UserID = id
+		return nil
+	}
+}
+
+func WithCoinTypeID(id *string, must bool) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if id == nil {
+			if must {
+				return wlog.Errorf("invalid cointypeid")
+			}
+			return nil
+		}
+		ccHandler := common.CoinCheckHandler{CoinTypeID: id}
+		err := ccHandler.CheckCoin(ctx)
+		if err != nil {
+			return wlog.WrapError(err)
+		}
+		h.CoinTypeID = id
+		return nil
+	}
+}
+
+func WithProportion(proportion *string, must bool) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if proportion == nil {
+			if must {
+				return wlog.Errorf("invalid proportion")
+			}
+			return nil
+		}
+		_proportion, err := decimal.NewFromString(*proportion)
+		if err != nil {
+			return wlog.Errorf("invalid proportion,err: %v", err)
+		}
+		h.Proportion = &_proportion
 		return nil
 	}
 }
