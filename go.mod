@@ -8,7 +8,7 @@ require (
 	github.com/NpoolPlatform/chain-middleware v0.0.0-20240228100535-eb1bcf896eb9
 	github.com/NpoolPlatform/go-service-framework v0.0.0-20240510075442-89278cb5cf47
 	github.com/NpoolPlatform/libent-cruder v0.0.0-20231008051607-f64457cf6ab6
-	github.com/NpoolPlatform/message v0.0.0-20241014090036-e11c62655da4
+	github.com/NpoolPlatform/message v0.0.0-20241014095652-5ffb1a4feb8e
 	github.com/NpoolPlatform/miningpool-middleware v0.0.0-20241014091143-c0d478c606a6
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/google/uuid v1.3.0
