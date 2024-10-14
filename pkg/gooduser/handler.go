@@ -2,9 +2,8 @@ package gooduser
 
 import (
 	"context"
-	"fmt"
 
-	coinmwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/coin"
+	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
 	rootusemwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/rootuser"
 
 	goodusergw "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/gooduser"
@@ -13,19 +12,19 @@ import (
 )
 
 type Handler struct {
-	ID             *uint32
-	EntID          *string
-	PoolCoinTypeID *string
-	RootUserID     *string
-	Offset         int32
-	Limit          int32
+	ID          *uint32
+	EntID       *string
+	CoinTypeIDs []string
+	RootUserID  *string
+	Offset      int32
+	Limit       int32
 }
 
 func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) error) (*Handler, error) {
 	handler := &Handler{}
 	for _, opt := range options {
 		if err := opt(ctx, handler); err != nil {
-			return nil, err
+			return nil, wlog.WrapError(err)
 		}
 	}
 	return handler, nil
@@ -40,11 +39,9 @@ func mw2GW(info *goodusermw.GoodUser) *goodusergw.GoodUser {
 		EntID:          info.EntID,
 		Name:           info.Name,
 		RootUserID:     info.RootUserID,
-		PoolCoinTypeID: info.PoolCoinTypeID,
-		MiningpoolType: info.MiningpoolType,
-		CoinType:       info.CoinType,
+		PoolID:         info.PoolID,
+		MiningPoolType: info.MiningPoolType,
 		ReadPageLink:   info.ReadPageLink,
-		RevenueType:    info.RevenueType,
 		CreatedAt:      info.CreatedAt,
 		UpdatedAt:      info.UpdatedAt,
 	}
@@ -62,7 +59,7 @@ func WithID(u *uint32, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if u == nil {
 			if must {
-				return fmt.Errorf("invalid id")
+				return wlog.Errorf("invalid id")
 			}
 			return nil
 		}
@@ -75,7 +72,7 @@ func WithEntID(id *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if id == nil {
 			if must {
-				return fmt.Errorf("invalid entid")
+				return wlog.Errorf("invalid entid")
 			}
 			return nil
 		}
@@ -84,22 +81,12 @@ func WithEntID(id *string, must bool) func(context.Context, *Handler) error {
 	}
 }
 
-func WithPoolCoinTypeID(id *string, must bool) func(context.Context, *Handler) error {
+func WithCoinTypeIDs(ids []string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
-		if id == nil {
-			if must {
-				return fmt.Errorf("invalid coinid")
-			}
-			return nil
+		if err := h.checkCoinTypeIDs(ctx, ids); err != nil {
+			return wlog.WrapError(err)
 		}
-		exist, err := coinmwcli.ExistCoin(ctx, *id)
-		if err != nil {
-			return err
-		}
-		if !exist {
-			return fmt.Errorf("invalid coinid")
-		}
-		h.PoolCoinTypeID = id
+		h.CoinTypeIDs = ids
 		return nil
 	}
 }
@@ -108,16 +95,16 @@ func WithRootUserID(id *string, must bool) func(context.Context, *Handler) error
 	return func(ctx context.Context, h *Handler) error {
 		if id == nil {
 			if must {
-				return fmt.Errorf("invalid rootuserid")
+				return wlog.Errorf("invalid rootuserid")
 			}
 			return nil
 		}
 		exist, err := rootusemwcli.ExistRootUser(ctx, *id)
 		if err != nil {
-			return err
+			return wlog.WrapError(err)
 		}
 		if !exist {
-			return fmt.Errorf("invalid rootuserid")
+			return wlog.Errorf("invalid rootuserid")
 		}
 		h.RootUserID = id
 		return nil

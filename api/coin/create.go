@@ -18,7 +18,6 @@ func (s *Server) AdminCreateCoin(ctx context.Context, in *npool.AdminCreateCoinR
 		coin1.WithPoolID(&in.PoolID, true),
 		coin1.WithCoinTypeID(&in.CoinTypeID, true),
 		coin1.WithCoinType(&in.CoinType, true),
-		coin1.WithRevenueType(&in.RevenueType, true),
 		coin1.WithFeeRatio(&in.FeeRatio, true),
 		coin1.WithFixedRevenueAble(&in.FixedRevenueAble, true),
 		coin1.WithLeastTransferAmount(&in.LeastTransferAmount, true),

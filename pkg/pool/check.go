@@ -2,8 +2,8 @@ package pool
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
 	v1 "github.com/NpoolPlatform/message/npool/basetypes/v1"
 
@@ -23,11 +23,11 @@ func (h *Handler) checkPool(ctx context.Context) error {
 		},
 	})
 	if err != nil {
-		return err
+		return wlog.WrapError(err)
 	}
 
 	if !exist {
-		return fmt.Errorf("invalid pool")
+		return wlog.Errorf("invalid pool")
 	}
 	return nil
 }

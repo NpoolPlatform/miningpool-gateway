@@ -1,4 +1,4 @@
-# Npool Miningpool Gateway
+# Npool MiningPool Gateway
 
 [![Test](https://github.com/NpoolPlatform/miningpool-gateway/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/NpoolPlatform/miningpool-gateway/actions/workflows/main.yml)
 

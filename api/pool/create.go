@@ -15,7 +15,7 @@ import (
 func (s *Server) AdminCreatePool(ctx context.Context, in *npool.AdminCreatePoolRequest) (*npool.AdminCreatePoolResponse, error) {
 	handler, err := pool1.NewHandler(
 		ctx,
-		pool1.WithMiningpoolType(&in.MiningpoolType, true),
+		pool1.WithMiningPoolType(&in.MiningPoolType, true),
 		pool1.WithName(&in.Name, true),
 		pool1.WithSite(&in.Site, true),
 		pool1.WithLogo(&in.Logo, true),

@@ -2,8 +2,8 @@ package rootuser
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
 	rootusergw "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/rootuser"
 	rootusermw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/rootuser"
 	constant "github.com/NpoolPlatform/miningpool-gateway/pkg/const"
@@ -26,7 +26,7 @@ func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) 
 	handler := &Handler{}
 	for _, opt := range options {
 		if err := opt(ctx, handler); err != nil {
-			return nil, err
+			return nil, wlog.WrapError(err)
 		}
 	}
 	return handler, nil
@@ -45,7 +45,7 @@ func mw2GW(info *rootusermw.RootUser) *rootusergw.RootUser {
 		AuthToken:      info.AuthToken,
 		Authed:         info.Authed,
 		Remark:         info.Remark,
-		MiningpoolType: info.MiningpoolType,
+		MiningPoolType: info.MiningPoolType,
 		CreatedAt:      info.CreatedAt,
 		UpdatedAt:      info.UpdatedAt,
 	}
@@ -63,7 +63,7 @@ func WithID(u *uint32, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if u == nil {
 			if must {
-				return fmt.Errorf("invalid id")
+				return wlog.Errorf("invalid id")
 			}
 			return nil
 		}
@@ -76,7 +76,7 @@ func WithEntID(id *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if id == nil {
 			if must {
-				return fmt.Errorf("invalid entid")
+				return wlog.Errorf("invalid entid")
 			}
 			return nil
 		}
@@ -89,7 +89,7 @@ func WithPoolID(id *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if id == nil {
 			if must {
-				return fmt.Errorf("invalid poolid")
+				return wlog.Errorf("invalid poolid")
 			}
 			return nil
 		}
@@ -102,7 +102,7 @@ func WithName(name *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if name == nil {
 			if must {
-				return fmt.Errorf("invalid name")
+				return wlog.Errorf("invalid name")
 			}
 			return nil
 		}
@@ -115,7 +115,7 @@ func WithEmail(email *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if email == nil {
 			if must {
-				return fmt.Errorf("invalid email")
+				return wlog.Errorf("invalid email")
 			}
 			return nil
 		}
@@ -128,7 +128,7 @@ func WithAuthToken(authtoken *string, must bool) func(context.Context, *Handler)
 	return func(ctx context.Context, h *Handler) error {
 		if authtoken == nil {
 			if must {
-				return fmt.Errorf("invalid authtoken")
+				return wlog.Errorf("invalid authtoken")
 			}
 			return nil
 		}
@@ -141,7 +141,7 @@ func WithRemark(remark *string, must bool) func(context.Context, *Handler) error
 	return func(ctx context.Context, h *Handler) error {
 		if remark == nil {
 			if must {
-				return fmt.Errorf("invalid remark")
+				return wlog.Errorf("invalid remark")
 			}
 			return nil
 		}

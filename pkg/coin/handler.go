@@ -2,9 +2,8 @@ package coin
 
 import (
 	"context"
-	"fmt"
 
-	mpbasetypes "github.com/NpoolPlatform/message/npool/basetypes/miningpool/v1"
+	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
 	basetypes "github.com/NpoolPlatform/message/npool/basetypes/v1"
 	coingw "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/coin"
 	coinmw "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/coin"
@@ -22,7 +21,6 @@ type Handler struct {
 	PoolID                 *string
 	CoinTypeID             *string
 	CoinType               *basetypes.CoinType
-	RevenueType            *mpbasetypes.RevenueType
 	FeeRatio               *string
 	FixedRevenueAble       *bool
 	LeastTransferAmount    *string
@@ -36,7 +34,7 @@ func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) 
 	handler := &Handler{}
 	for _, opt := range options {
 		if err := opt(ctx, handler); err != nil {
-			return nil, err
+			return nil, wlog.WrapError(err)
 		}
 	}
 	return handler, nil
@@ -52,8 +50,7 @@ func mw2GW(info *coinmw.Coin) *coingw.Coin {
 		PoolID:                 info.PoolID,
 		CoinTypeID:             info.CoinTypeID,
 		CoinType:               info.CoinType,
-		RevenueType:            info.RevenueType,
-		MiningpoolType:         info.MiningpoolType,
+		MiningPoolType:         info.MiningPoolType,
 		FeeRatio:               info.FeeRatio,
 		FixedRevenueAble:       info.FixedRevenueAble,
 		LeastTransferAmount:    info.LeastTransferAmount,
@@ -68,7 +65,7 @@ func WithID(u *uint32, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if u == nil {
 			if must {
-				return fmt.Errorf("invalid id")
+				return wlog.Errorf("invalid id")
 			}
 			return nil
 		}
@@ -81,7 +78,7 @@ func WithEntID(id *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if id == nil {
 			if must {
-				return fmt.Errorf("invalid entid")
+				return wlog.Errorf("invalid entid")
 			}
 			return nil
 		}
@@ -94,31 +91,15 @@ func WithCoinType(cointype *basetypes.CoinType, must bool) func(context.Context,
 	return func(ctx context.Context, h *Handler) error {
 		if cointype == nil {
 			if must {
-				return fmt.Errorf("invalid cointype")
+				return wlog.Errorf("invalid cointype")
 			}
 			return nil
 		}
 
 		if *cointype == basetypes.CoinType_DefaultCoinType {
-			return fmt.Errorf("invalid cointype,not allow be default type")
+			return wlog.Errorf("invalid cointype,not allow be default type")
 		}
 		h.CoinType = cointype
-		return nil
-	}
-}
-
-func WithRevenueType(revenuetype *mpbasetypes.RevenueType, must bool) func(context.Context, *Handler) error {
-	return func(ctx context.Context, h *Handler) error {
-		if revenuetype == nil {
-			if must {
-				return fmt.Errorf("invalid revenuetype")
-			}
-			return nil
-		}
-		if *revenuetype == mpbasetypes.RevenueType_DefaultRevenueType {
-			return fmt.Errorf("invalid revenuetype,not allow be default type")
-		}
-		h.RevenueType = revenuetype
 		return nil
 	}
 }
@@ -127,19 +108,19 @@ func WithCoinTypeID(cointypeid *string, must bool) func(context.Context, *Handle
 	return func(ctx context.Context, h *Handler) error {
 		if cointypeid == nil {
 			if must {
-				return fmt.Errorf("invalid cointypeid")
+				return wlog.Errorf("invalid cointypeid")
 			}
 			return nil
 		}
 		_, err := uuid.Parse(*cointypeid)
 		if err != nil {
-			return err
+			return wlog.WrapError(err)
 		}
 
 		ccHandler := common.CoinCheckHandler{CoinTypeID: cointypeid}
 		err = ccHandler.CheckCoin(ctx)
 		if err != nil {
-			return err
+			return wlog.WrapError(err)
 		}
 
 		h.CoinTypeID = cointypeid
@@ -151,37 +132,38 @@ func WithPoolID(poolid *string, must bool) func(context.Context, *Handler) error
 	return func(ctx context.Context, h *Handler) error {
 		if poolid == nil {
 			if must {
-				return fmt.Errorf("invalid poolid")
+				return wlog.Errorf("invalid poolid")
 			}
 			return nil
 		}
 		exist, err := poolmwcli.ExistPool(ctx, *poolid)
 		if err != nil {
-			return err
+			return wlog.WrapError(err)
 		}
 		if !exist {
-			return fmt.Errorf("invalid poolid")
+			return wlog.Errorf("invalid poolid")
 		}
 		h.PoolID = poolid
 		return nil
 	}
 }
 
+//nolint:dupl
 func WithFeeRatio(feeratio *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if feeratio == nil {
 			if must {
-				return fmt.Errorf("invalid feeratio")
+				return wlog.Errorf("invalid feeratio")
 			}
 			return nil
 		}
 		_feeratio, err := decimal.NewFromString(*feeratio)
 		if err != nil {
-			return err
+			return wlog.WrapError(err)
 		}
 
 		if _feeratio.Sign() <= 0 {
-			return fmt.Errorf("invalid feeratio")
+			return wlog.Errorf("invalid feeratio")
 		}
 
 		h.FeeRatio = feeratio
@@ -193,7 +175,7 @@ func WithFixedRevenueAble(fixedrevenueable *bool, must bool) func(context.Contex
 	return func(ctx context.Context, h *Handler) error {
 		if fixedrevenueable == nil {
 			if must {
-				return fmt.Errorf("invalid fixedrevenueable")
+				return wlog.Errorf("invalid fixedrevenueable")
 			}
 			return nil
 		}
@@ -202,20 +184,21 @@ func WithFixedRevenueAble(fixedrevenueable *bool, must bool) func(context.Contex
 	}
 }
 
+//nolint:dupl
 func WithLeastTransferAmount(leastTransferAmount *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if leastTransferAmount == nil {
 			if must {
-				return fmt.Errorf("invalid leasttransferamount")
+				return wlog.Errorf("invalid leasttransferamount")
 			}
 			return nil
 		}
 		_leastTransferAmount, err := decimal.NewFromString(*leastTransferAmount)
 		if err != nil {
-			return err
+			return wlog.WrapError(err)
 		}
 		if _leastTransferAmount.Sign() <= 0 {
-			return fmt.Errorf("invalid leasttransferamount")
+			return wlog.Errorf("invalid leasttransferamount")
 		}
 		h.LeastTransferAmount = leastTransferAmount
 		return nil
@@ -226,7 +209,7 @@ func WithBenefitIntervalSeconds(benefitintervalseconds *uint32, must bool) func(
 	return func(ctx context.Context, h *Handler) error {
 		if benefitintervalseconds == nil {
 			if must {
-				return fmt.Errorf("invalid benefitintervalseconds")
+				return wlog.Errorf("invalid benefitintervalseconds")
 			}
 			return nil
 		}
@@ -239,7 +222,7 @@ func WithRemark(remark *string, must bool) func(context.Context, *Handler) error
 	return func(ctx context.Context, h *Handler) error {
 		if remark == nil {
 			if must {
-				return fmt.Errorf("invalid remark")
+				return wlog.Errorf("invalid remark")
 			}
 			return nil
 		}

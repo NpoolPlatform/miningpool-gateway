@@ -3,6 +3,7 @@ package pool
 import (
 	"context"
 
+	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
 	poolgwpb "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/app/pool"
 	"github.com/NpoolPlatform/message/npool/miningpool/mw/v1/app/pool"
 	apppoolmwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/app/pool"
@@ -20,7 +21,7 @@ func (h *Handler) CreatePool(ctx context.Context) (*poolgwpb.Pool, error) {
 		PoolID: h.PoolID,
 	})
 	if err != nil {
-		return nil, err
+		return nil, wlog.WrapError(err)
 	}
 	return fullPools(ctx, *h.EntID)
 }

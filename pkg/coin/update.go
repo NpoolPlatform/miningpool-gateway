@@ -3,6 +3,7 @@ package coin
 import (
 	"context"
 
+	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
 	coingwpb "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/coin"
 	coinmwpb "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/coin"
 	coinmwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/coin"
@@ -18,7 +19,6 @@ func (h *Handler) UpdateCoin(ctx context.Context) (*coingwpb.Coin, error) {
 	err := coinmwcli.UpdateCoin(ctx, &coinmwpb.CoinReq{
 		ID:                     h.ID,
 		EntID:                  h.EntID,
-		RevenueType:            h.RevenueType,
 		FeeRatio:               h.FeeRatio,
 		FixedRevenueAble:       h.FixedRevenueAble,
 		LeastTransferAmount:    h.LeastTransferAmount,
@@ -26,7 +26,7 @@ func (h *Handler) UpdateCoin(ctx context.Context) (*coingwpb.Coin, error) {
 		Remark:                 h.Remark,
 	})
 	if err != nil {
-		return nil, err
+		return nil, wlog.WrapError(err)
 	}
 
 	return h.GetCoin(ctx)

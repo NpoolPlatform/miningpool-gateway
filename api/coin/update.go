@@ -17,7 +17,6 @@ func (s *Server) AdminUpdateCoin(ctx context.Context, in *npool.AdminUpdateCoinR
 		ctx,
 		coin1.WithID(&in.ID, true),
 		coin1.WithEntID(&in.EntID, true),
-		coin1.WithRevenueType(in.RevenueType, false),
 		coin1.WithFeeRatio(in.FeeRatio, false),
 		coin1.WithFixedRevenueAble(in.FixedRevenueAble, false),
 		coin1.WithLeastTransferAmount(in.LeastTransferAmount, false),

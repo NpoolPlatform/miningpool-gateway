@@ -2,8 +2,8 @@ package coin
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
 	v1 "github.com/NpoolPlatform/message/npool/basetypes/v1"
 
@@ -23,11 +23,11 @@ func (h *Handler) checkCoin(ctx context.Context) error {
 		},
 	})
 	if err != nil {
-		return err
+		return wlog.WrapError(err)
 	}
 
 	if !exist {
-		return fmt.Errorf("invalid coin")
+		return wlog.Errorf("invalid coin")
 	}
 	return nil
 }
