@@ -152,6 +152,8 @@ spec:
       http: *http_rules
     - host: api.jh-testing.npool.top
       http: *http_rules
+    - host: api.harbin-testing.npool.top
+      http: *http_rules
     - host: api.japan-procyon-production.npool.top
       http: *http_rules
     - host: api.hk-cryptomore-production.npool.top
@@ -161,6 +163,10 @@ spec:
     - host: api.mimo.biz
       http: *http_rules
     - host: api.epool.tech
+      http: *http_rules
+    - host: api.xhash.ai
+      http: *http_rules
+    - host: api.tokyo-xhash-production.npool.top
       http: *http_rules
 
 ---
@@ -231,6 +237,8 @@ spec:
       http: *http_rules
     - host: api.jh-testing.npool.top
       http: *http_rules
+    - host: api.harbin-testing.npool.top
+      http: *http_rules
     - host: api.japan-procyon-production.npool.top
       http: *http_rules
     - host: api.hk-cryptomore-production.npool.top
@@ -240,4 +248,8 @@ spec:
     - host: api.mimo.biz
       http: *http_rules
     - host: api.epool.tech
+      http: *http_rules
+    - host: api.xhash.ai
+      http: *http_rules
+    - host: api.tokyo-xhash-production.npool.top
       http: *http_rules
