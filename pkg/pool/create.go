@@ -4,6 +4,7 @@ package pool
 import (
 	"context"
 
+	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
 	poolgwpb "github.com/NpoolPlatform/message/npool/miningpool/gw/v1/pool"
 	poolmwpb "github.com/NpoolPlatform/message/npool/miningpool/mw/v1/pool"
 	poolmwcli "github.com/NpoolPlatform/miningpool-middleware/pkg/client/pool"
@@ -18,14 +19,14 @@ func (h *Handler) CreatePool(ctx context.Context) (*poolgwpb.Pool, error) {
 
 	err := poolmwcli.CreatePool(ctx, &poolmwpb.PoolReq{
 		EntID:          h.EntID,
-		MiningpoolType: h.MiningpoolType,
+		MiningPoolType: h.MiningPoolType,
 		Name:           h.Name,
 		Site:           h.Site,
 		Logo:           h.Logo,
 		Description:    h.Description,
 	})
 	if err != nil {
-		return nil, err
+		return nil, wlog.WrapError(err)
 	}
 
 	return h.GetPool(ctx)

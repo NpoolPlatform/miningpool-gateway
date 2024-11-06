@@ -42,3 +42,35 @@ func (s *Server) GetOrderUser(ctx context.Context, in *npool.GetOrderUserRequest
 		Info: info,
 	}, nil
 }
+
+func (s *Server) AdminGetOrderUserProportion(ctx context.Context, in *npool.AdminGetOrderUserProportionRequest) (*npool.AdminGetOrderUserProportionResponse, error) {
+	handler, err := orderuser1.NewHandler(
+		ctx,
+		orderuser1.WithEntID(&in.EntID, true),
+		orderuser1.WithAppID(&in.TargetAppID, true),
+		orderuser1.WithUserID(&in.TargetUserID, true),
+		orderuser1.WithCoinTypeID(&in.CoinTypeID, true),
+	)
+	if err != nil {
+		logger.Sugar().Errorw(
+			"AdminGetOrderUserProportion",
+			"In", in,
+			"Error", err,
+		)
+		return &npool.AdminGetOrderUserProportionResponse{}, status.Error(codes.Aborted, err.Error())
+	}
+
+	proportion, err := handler.GetOrderUserProportion(ctx)
+	if err != nil {
+		logger.Sugar().Errorw(
+			"AdminGetOrderUserProportion",
+			"In", in,
+			"Error", err,
+		)
+		return &npool.AdminGetOrderUserProportionResponse{}, status.Error(codes.Aborted, err.Error())
+	}
+
+	return &npool.AdminGetOrderUserProportionResponse{
+		Proportion: proportion,
+	}, nil
+}

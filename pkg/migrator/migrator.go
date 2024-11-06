@@ -1,4 +1,4 @@
-//nolint
+// nolint
 package migrator
 
 import (
@@ -9,6 +9,7 @@ import (
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/config"
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
+	"github.com/NpoolPlatform/go-service-framework/pkg/wlog"
 
 	constant "github.com/NpoolPlatform/go-service-framework/pkg/mysql/const"
 )
@@ -30,7 +31,7 @@ func dsn(hostname string) (string, error) {
 	svc, err := config.PeekService(constant.MysqlServiceName)
 	if err != nil {
 		logger.Sugar().Warnw("dsn", "error", err)
-		return "", err
+		return "", wlog.WrapError(err)
 	}
 
 	return fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?parseTime=true&interpolateParams=true",
@@ -44,14 +45,14 @@ func dsn(hostname string) (string, error) {
 func open(hostname string) (conn *sql.DB, err error) {
 	hdsn, err := dsn(hostname)
 	if err != nil {
-		return nil, err
+		return nil, wlog.WrapError(err)
 	}
 
 	logger.Sugar().Infow("open", "hdsn", hdsn)
 
 	conn, err = sql.Open("mysql", hdsn)
 	if err != nil {
-		return nil, err
+		return nil, wlog.WrapError(err)
 	}
 
 	// https://github.com/go-sql-driver/mysql
